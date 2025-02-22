@@ -23,12 +23,11 @@ import { SidebarContainer, LogoBox } from './styled/StyledComponents';
 
 const Sidebar = ({ isExpanded, onMouseEnter, onMouseLeave }) => {
   const mainMenuItems = [
-    { icon: <Layers />, text: 'My applications' },
-    { icon: <Timeline />, text: 'Analyzer' },
+    { icon: <Layers />, text: 'Applications', selected: true },
+    { icon: <Timeline />, text: 'Analysis tools' },
     { icon: <People />, text: 'Members' },
     { icon: <CreditCard />, text: 'Subscription overview' },
-    { icon: <Lock />, text: 'Authentication configuration' },
-    { icon: <Settings />, text: 'Organizations' }
+    { icon: <Settings />, text: 'Account settings' },
   ];
 
   const bottomMenuItems = [
@@ -36,6 +35,32 @@ const Sidebar = ({ isExpanded, onMouseEnter, onMouseLeave }) => {
     { icon: <MenuBook />, text: 'Documentation' },
     { icon: <Notifications />, text: "What's new" }
   ];
+
+  const listItemStyles = {
+    minHeight: 48,
+    justifyContent: 'center',
+    px: 2.5,
+    '&:hover': {
+      bgcolor: 'grey.800',
+      cursor: 'pointer',
+    }
+  };
+
+  const getListItemIconStyles = (selected) => ({
+    minWidth: 0,
+    mr: isExpanded ? 3 : 0,
+    justifyContent: 'center',
+    color: selected ? 'primary.main' : 'grey.400',
+    transition: 'color 0.2s ease'
+  });
+
+  const getListItemTextStyles = (selected) => ({
+    opacity: isExpanded ? 1 : 0,
+    color: selected ? 'primary.main' : 'grey.400',
+    ml: isExpanded ? 0 : -2,
+    transition: 'color 0.2s ease',
+    whiteSpace: 'nowrap'
+  });
 
   return (
     <SidebarContainer
@@ -46,33 +71,23 @@ const Sidebar = ({ isExpanded, onMouseEnter, onMouseLeave }) => {
       <LogoBox>
         <Typography color="white">{'OB'}</Typography>
       </LogoBox>
-      <List>
+      <br/>
+      <List sx={{ p: 0 }}>
         {mainMenuItems.map((item, index) => (
           <ListItem
             button
             key={index}
             sx={{
-              minHeight: 48,
-              justifyContent: isExpanded ? 'initial' : 'center',
-              px: 2.5,
+              ...listItemStyles,
+              bgcolor: item.selected ? 'rgba(147, 51, 234, 0.1)' : 'transparent',
             }}
           >
-            <ListItemIcon
-              sx={{
-                color: 'grey.400',
-                minWidth: 0,
-                mr: isExpanded ? 3 : 'auto',
-                justifyContent: 'center',
-              }}
-            >
+            <ListItemIcon sx={getListItemIconStyles(item.selected)}>
               {item.icon}
             </ListItemIcon>
             <ListItemText
               primary={item.text}
-              sx={{
-                opacity: isExpanded ? 1 : 0,
-                color: 'grey.400'
-              }}
+              sx={getListItemTextStyles(item.selected)}
             />
           </ListItem>
         ))}
@@ -81,28 +96,14 @@ const Sidebar = ({ isExpanded, onMouseEnter, onMouseLeave }) => {
           <ListItem
             button
             key={index}
-            sx={{
-              minHeight: 48,
-              justifyContent: isExpanded ? 'initial' : 'center',
-              px: 2.5,
-            }}
+            sx={listItemStyles}
           >
-            <ListItemIcon
-              sx={{
-                color: 'grey.400',
-                minWidth: 0,
-                mr: isExpanded ? 3 : 'auto',
-                justifyContent: 'center',
-              }}
-            >
+            <ListItemIcon sx={getListItemIconStyles(false)}>
               {item.icon}
             </ListItemIcon>
             <ListItemText
               primary={item.text}
-              sx={{
-                opacity: isExpanded ? 1 : 0,
-                color: 'grey.400'
-              }}
+              sx={getListItemTextStyles(false)}
             />
           </ListItem>
         ))}
