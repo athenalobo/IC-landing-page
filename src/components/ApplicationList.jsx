@@ -5,11 +5,10 @@ import {
   Box, 
   Typography, 
   Button, 
-  InputBase, 
-  IconButton,
+  InputBase,
   styled
 } from '@mui/material';
-import { Add, Search, MoreVert } from '@mui/icons-material';
+import { Add, Search } from '@mui/icons-material';
 
 const getInitials = (name) => {
   return name
@@ -21,23 +20,23 @@ const getInitials = (name) => {
 
 const getAvatarColor = (initials) => {
   const colorMap = {
-    'OB': '#9333ea',  // Keep this as is since it might be brand-specific
+    'OB': '#9333ea',
     'default': {
-      'A': '#4ade80',  // Softer green
-      'B': '#60a5fa',  // Muted blue
-      'C': '#a78bfa',  // Soft purple
-      'E': '#f472b6',  // Muted pink
-      'D': '#13348f',  // Teal
-      'S': '#818cf8',  // Indigo
-      'M': '#2dd4bf',  // Turquoise
-      'V': '#fb923c',  // Soft orange
+      'A': '#4ade80',
+      'B': '#60a5fa',
+      'C': '#a78bfa',
+      'E': '#f472b6',
+      'D': '#13348f',
+      'S': '#818cf8',
+      'M': '#2dd4bf',
+      'V': '#fb923c',
     }
   };
   
   return initials === 'OB' ? colorMap.OB : (colorMap.default[initials[0]] || '#6b7280');
 };
 
-const StatusChip = styled(Box)(({ status, theme }) => {
+const StatusChip = styled(Box)(({ status }) => {
   const statusColors = {
     'analysis complete': {
       color: '#4ade80',
@@ -99,7 +98,6 @@ const StatusChip = styled(Box)(({ status, theme }) => {
   };
 });
 
-
 const StyledSearchInput = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -112,37 +110,55 @@ const StyledSearchInput = styled(Box)(({ theme }) => ({
 }));
 
 const StyledCard = styled(Box)(({ theme, selected }) => ({
-  backgroundColor: selected ? theme.palette.grey[700] : theme.palette.grey[800],
+  backgroundColor: theme.palette.grey[800],
   borderRadius: theme.shape.borderRadius,
   padding: theme.spacing(1.5),
   marginBottom: theme.spacing(1),
   transition: 'all 0.2s ease',
   cursor: 'pointer',
-  borderLeft: selected ? `3px solid ${theme.palette.primary.main}` : '3px solid transparent',
-  '&:hover': {
-    backgroundColor: selected ? theme.palette.grey[700] : theme.palette.grey[750],
-    transform: 'translateX(4px)',
-    '& .menu-button': {
-      opacity: 1,
+  position: 'relative',
+  ...(selected && {
+    backgroundColor: theme.palette.primary.dark,
+    boxShadow: `0 0 0 1px ${theme.palette.primary.main}`,
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      bottom: 0,
+      width: '3px',
+      backgroundColor: theme.palette.primary.main,
+      borderTopLeftRadius: theme.shape.borderRadius,
+      borderBottomLeftRadius: theme.shape.borderRadius,
     }
+  }),
+  '&:hover': {
+    backgroundColor: selected ? theme.palette.primary.dark : theme.palette.grey[750],
+    transform: 'translateX(4px)',
   }
 }));
 
-const MenuButton = styled(IconButton)({
-  opacity: 0,
-  transition: 'opacity 0.2s',
-  padding: 4,
-});
-
-const ApplicationList = ({ applications, selectedApp, onSelectApp }) => {
+const ApplicationList = ({ applications = [], selectedApp, onSelectApp }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showOnlyMine, setShowOnlyMine] = useState(false);
 
+  console.log(searchQuery)
+
   const filteredApps = useMemo(() => {
+    if (!applications) return [];
+    
     return applications.filter(app => {
-      const matchesSearch = app.name.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesOwner = showOnlyMine ? getInitials(app.ownerName) === 'OB' : true;
-      return matchesSearch && matchesOwner;
+      // Check if the app name matches the search query (case insensitive)
+      const nameMatches = searchQuery 
+        ? app.name.toLowerCase().includes(searchQuery.toLowerCase())
+        : true;
+
+      // Check if it's the user's app (Olivier Bonsignour)
+      const isMyApp = showOnlyMine 
+        ? app.ownerName === "Olivier Bonsignour"
+        : true;
+
+      return nameMatches && isMyApp;
     });
   }, [applications, searchQuery, showOnlyMine]);
 
@@ -154,7 +170,6 @@ const ApplicationList = ({ applications, selectedApp, onSelectApp }) => {
       flexDirection: 'column',
       height: '100%',
     }}>
-      {/* Compact Header */}
       <Box sx={{ p: 2, borderBottom: '1px solid', borderColor: 'grey.800' }}>
         <Box sx={{ 
           display: 'flex', 
@@ -208,7 +223,6 @@ const ApplicationList = ({ applications, selectedApp, onSelectApp }) => {
         </StyledSearchInput>
       </Box>
 
-      {/* Application Cards */}
       <Box sx={{ 
         overflowY: 'auto',
         flex: 1,
@@ -235,7 +249,12 @@ const ApplicationList = ({ applications, selectedApp, onSelectApp }) => {
               
               <Box sx={{ flex: 1, minWidth: 0 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 0.5 }}>
-                  <Typography color="white" variant="subtitle2" noWrap sx={{ flex: 1 }}>
+                  <Typography 
+                    color="white" 
+                    variant="subtitle2" 
+                    noWrap 
+                    sx={{ flex: 1 }}
+                  >
                     {app.name}
                   </Typography>
                   <StatusChip status={app.status}>
@@ -256,14 +275,6 @@ const ApplicationList = ({ applications, selectedApp, onSelectApp }) => {
                   </Typography>
                 </Box>
               </Box>
-
-              <MenuButton 
-                className="menu-button"
-                size="small"
-                sx={{ color: 'grey.400' }}
-              >
-                <MoreVert sx={{ fontSize: 18 }} />
-              </MenuButton>
             </Box>
           </StyledCard>
         ))}
