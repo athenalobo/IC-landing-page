@@ -6,7 +6,7 @@ export const SidebarContainer = styled(Box)(({ theme, isexpanded }) => ({
   left: 0,
   top: 0,
   height: '100vh',
-  width: isexpanded === 'true' ? '250px' : '70px',
+  width: isexpanded === 'true' ? '250px' : '50px',
   background: '#000000',
   borderRight: `1px solid ${theme.palette.grey[900]}`,
   transition: 'width 0.3s ease',
@@ -20,9 +20,9 @@ export const MainContent = styled(Box)(({ theme, sidebarexpanded }) => ({
   top: 0,
   height: '100vh',
   background: '#000000',
-  marginLeft: sidebarexpanded === 'true' ? '250px' : '70px',
+  marginLeft: sidebarexpanded === 'true' ? '250px' : '50px',
   transition: 'margin-left 0.3s ease',
-  width: `calc(100% - ${sidebarexpanded === 'true' ? '250px' : '70px'})`,
+  width: `calc(100% - ${sidebarexpanded === 'true' ? '250px' : '50px'})`,
 }));
 
 export const LogoBox = styled(Box)(({ theme }) => ({
