@@ -56,7 +56,7 @@ const ConfigPage = () => {
             position: 'absolute',
             width: '3px',
             height: '3px',
-            backgroundColor: 'rgba(139,92,246,0.2)',
+            backgroundColor: 'rgba(139,92,246,0.9)',
             borderRadius: '50%',
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,

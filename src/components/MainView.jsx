@@ -15,6 +15,8 @@ import ImprovementGrid from './ImprovementGrid';
 import ImpactImg from '../assets/image.png';
 import { StatusChip } from './ApplicationList';
 import ConfigPage from './ConfigPage';
+import { applications } from '../data/mockData';
+import WelcomeView from './WelcomeView';
 
 const float = keyframes`
   0%, 100% { transform: translateY(0) translateX(0); }
@@ -104,77 +106,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
 
   // Welcome screen when no app is selected
   if (!selectedApp) {
-    return (
-      <Box sx={{
-        minHeight: '100vh',
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'linear-gradient(180deg, #000000 0%, #121212 100%)',
-        position: 'relative',
-        overflow: 'hidden',
-      }}>
-        <Box sx={{
-          position: 'absolute',
-          inset: 0,
-          background: 'radial-gradient(circle at 50% 50%, rgba(139,92,246,0.1), transparent 70%)',
-          pointerEvents: 'none',
-        }} />
-
-        {[...Array(20)].map((_, i) => (
-          <Box
-            key={i}
-            sx={{
-              position: 'absolute',
-              width: '4px',
-              height: '4px',
-              backgroundColor: 'rgba(139,92,246,0.2)',
-              borderRadius: '50%',
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animation: `${float} ${Math.random() * 10 + 10}s linear infinite`,
-              animationDelay: `${Math.random() * 5}s`,
-            }}
-          />
-        ))}
-
-        <Compass 
-          size={80} 
-          style={{
-            color: '#8b5cf6',
-            marginBottom: '2rem',
-            filter: 'drop-shadow(0 0 10px rgba(139,92,246,0.3))',
-          }}
-        />
-        
-        <Box sx={{
-          textAlign: 'center',
-          maxWidth: '600px',
-          px: 3,
-        }}>
-          <Typography variant="h2" sx={{
-            fontSize: '2.5rem',
-            fontWeight: 'bold',
-            mb: 3,
-            background: 'linear-gradient(45deg, #8b5cf6, #6366f1)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-          }}>
-            Select an application
-          </Typography>
-          <Typography variant="body1" sx={{
-            color: 'rgba(255,255,255,0.7)',
-            fontSize: '1.125rem',
-            lineHeight: 1.7,
-          }}>
-            Discover new perspectives on your software.
-            Let us navigate the uncharted territories of your codebase together.
-          </Typography>
-        </Box>
-      </Box>
-    );
+    return <WelcomeView applications={applications} />;
   }
 
   const renderContent = () => {
