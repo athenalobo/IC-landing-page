@@ -15,6 +15,7 @@ import {
   Trash2 
 } from 'lucide-react';
 import { keyframes } from '@mui/system';
+import ConfigPage1 from './ConfigPage1';
 
 const float = keyframes`
   0%, 100% { transform: translateY(0) translateX(0); }
@@ -23,10 +24,12 @@ const float = keyframes`
   75% { transform: translateY(-30px) translateX(5px); }
 `;
 
-const ConfigPage = () => {
-  const handleAction = (action) => {
-    console.log(`Action clicked: ${action}`);
-  };
+const ConfigPage = ({ selectedApp }) => {
+  if (selectedApp?.status === 'Configuration pending') {
+    return (
+      <ConfigPage1/>
+    );
+  }
 
   return (
     <Box sx={{

@@ -18,6 +18,7 @@ import { StatusChip } from './ApplicationList';
 import ConfigPage from './ConfigPage';
 import { applications } from '../data/mockData';
 import WelcomeView from './WelcomeView';
+import ConfigPage1 from './ConfigPage1';
 
 const float = keyframes`
   0%, 100% { transform: translateY(0) translateX(0); }
@@ -56,7 +57,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
       case 'in progress':
       case 'Error':
         return section === 'view';
-      case 'Configuration Pending':
+      case 'Configuration pending':
         return false;
       default:
         return false;
@@ -74,36 +75,11 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
       case 'in progress':
       case 'Error':
         return ['summary'];
-      case 'Configuration Pending':
+      case 'Configuration pending':
       default:
         return [];
     }
   };
-
-  // Configuration pending placeholder
-  const ConfigurationPlaceholder = () => (
-    <Box sx={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: '100%',
-      p: 4
-    }}>
-      <Alert severity="info" sx={{ maxWidth: '600px' }}>
-        <AlertTitle>Configuration Required</AlertTitle>
-        <Typography variant="body1" paragraph>
-          To analyze your application, please complete the following steps in GitHub:
-        </Typography>
-        <List sx={{ pl: 2 }}>
-          <ListItem>1. Navigate to your repository settings</ListItem>
-          <ListItem>2. Enable GitHub Actions</ListItem>
-          <ListItem>3. Add the required configuration file to your repository</ListItem>
-          <ListItem>4. Trigger the initial analysis</ListItem>
-        </List>
-      </Alert>
-    </Box>
-  );
 
   // Welcome screen when no app is selected
   if (!selectedApp) {
@@ -112,11 +88,11 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
 
   const renderContent = () => {
     if (activeSection === 'configuration') {
-      return <ConfigPage />;
+      return <ConfigPage selectedApp={selectedApp}/>;
     }
 
-    if (selectedApp.status === 'Configuration Pending' && activeSection !== 'configuration') {
-      return <ConfigurationPlaceholder />;
+    if (selectedApp.status === 'Configuration pending' && activeSection !== 'configuration') {
+      return <ConfigPage1 />;
     }
 
     if (!isNavigationEnabled(activeSection)) {
@@ -143,7 +119,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
           visibleCards={visibleCards}
         />;
       case 'configuration':
-        return <ConfigPage />;
+        return <ConfigPage selectedApp={selectedApp} />;
       case 'view':
         return <DashboardGrid 
           disabled={!isNavigationEnabled('view')} 
@@ -257,6 +233,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
           activeSection={activeSection}
           onSectionChange={onSectionChange}
           availableSections={getEnabledSections()}
+          selectedApp={selectedApp}
         />
       </Box>
 

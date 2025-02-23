@@ -8,7 +8,51 @@ import {
   Settings,
 } from 'lucide-react';
 
-const NavigationBar = ({ activeSection, onSectionChange, availableSections}) => {
+const NavigationBar = ({ activeSection, onSectionChange, availableSections, selectedApp }) => {
+  // If status is Configuration Pending, only show configuration
+  if (selectedApp?.status === 'Configuration pending') {
+    return (
+      <Box sx={{
+        display: 'flex',
+        gap: 1,
+      }}>
+        <Box
+          onClick={() => onSectionChange('configuration')}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1.5,
+            color: 'white',
+            cursor: 'pointer',
+            padding: '0.5rem 1rem',
+            borderRadius: '6px',
+            transition: 'all 0.2s ease',
+            position: 'relative',
+            backgroundColor: 'rgba(139,92,246,0.15)',
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              bottom: '-1px',
+              left: '0',
+              right: '0',
+              height: '2px',
+              backgroundColor: '#8b5cf6',
+              borderRadius: '2px',
+            }
+          }}
+        >
+          <Settings size={18} />
+          <span style={{ 
+            fontSize: '0.875rem',
+            fontWeight: 500,
+          }}>
+            Application configuration
+          </span>
+        </Box>
+      </Box>
+    );
+  }
+
   const sections = [
     { 
       id: 'view', 
