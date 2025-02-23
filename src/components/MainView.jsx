@@ -12,6 +12,7 @@ import { Compass, Loader2 } from 'lucide-react';
 import NavigationBar from './NavigationBar';
 import DashboardGrid from './DashboardGrid';
 import ImprovementGrid from './ImprovementGrid';
+import ImpactImg from '../assets/image.png';
 
 const float = keyframes`
   0%, 100% { transform: translateY(0) translateX(0); }
@@ -213,7 +214,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
             <Box sx={{ p: 2 }}>
               <img 
                 width="100%" 
-                src="/api/placeholder/800/600" 
+                src={ImpactImg}
                 alt="Impact View"
               />
             </Box>
