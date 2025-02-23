@@ -163,12 +163,13 @@ const ApplicationList = ({ applications = [], selectedApp, onSelectApp }) => {
   }, [applications, searchQuery, showOnlyMine]);
 
   return (
-    <Box sx={{ 
-      width: 384,
+     <Box sx={{ 
+      width: '500px',  // Fixed width to 584px
       bgcolor: 'grey.900',
       display: 'flex',
       flexDirection: 'column',
       height: '100%',
+      flexShrink: 0, // Prevent shrinking
     }}>
       <Box sx={{ p: 2, borderBottom: '1px solid', borderColor: 'grey.800' }}>
         <Box sx={{ 
