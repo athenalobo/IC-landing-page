@@ -13,6 +13,7 @@ import NavigationBar from './NavigationBar';
 import DashboardGrid from './DashboardGrid';
 import ImprovementGrid from './ImprovementGrid';
 import ImpactImg from '../assets/image.png';
+import ConfigPage from './ConfigPage';
 
 const float = keyframes`
   0%, 100% { transform: translateY(0) translateX(0); }
@@ -42,6 +43,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
   // Helper function to determine if navigation should be enabled
   const isNavigationEnabled = (section) => {
     if (!selectedApp) return false;
+    if (section === 'configuration') return true;
     
     switch (selectedApp.status) {
       case 'Analysis complete':
@@ -175,7 +177,12 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
   }
 
   const renderContent = () => {
-    if (selectedApp.status === 'Configuration Pending') {
+
+     if (activeSection === 'configuration') {
+      return <ConfigPage />;
+    }
+
+    if (selectedApp.status === 'Configuration Pending' && activeSection !== 'configuration') {
       return <ConfigurationPlaceholder />;
     }
 
@@ -202,6 +209,8 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
           disabled={!isNavigationEnabled('improve')} 
           visibleCards={visibleCards}
         />;
+        case 'configuration':
+        return <ConfigPage/>
       case 'view':
         return <DashboardGrid 
           disabled={!isNavigationEnabled('view')} 
@@ -233,9 +242,9 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
   const getEnabledSections = () => {
     const visibleCards = getVisibleCards();
     if (visibleCards === 'all') {
-      return ['view', 'improve', 'impact', 'search'];
+      return ['view', 'improve', 'impact', 'search', 'configuration'];
     }
-    return ['view'];
+    return ['view', 'configuration'];
   };
 
   return (

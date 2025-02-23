@@ -5,9 +5,10 @@ import {
   GitBranch, 
   Gauge, 
   Search,
+  Settings,
 } from 'lucide-react';
 
-const NavigationBar = ({ activeSection, onSectionChange }) => {
+const NavigationBar = ({ activeSection, onSectionChange, availableSections}) => {
   const sections = [
     { 
       id: 'view', 
@@ -29,6 +30,11 @@ const NavigationBar = ({ activeSection, onSectionChange }) => {
       label: 'Search in CAST Imaging',
       icon: Search,
     },
+    { 
+      id: 'configuration', 
+      label: 'Application configuration',
+      icon: Settings,
+    },
   ];
 
   return (
@@ -39,6 +45,9 @@ const NavigationBar = ({ activeSection, onSectionChange }) => {
       {sections.map((section) => {
         const Icon = section.icon;
         const isActive = activeSection === section.id;
+        const isEnabled = section.id === 'configuration' || availableSections.includes(section.id);
+        
+        if (!isEnabled) return null;
         
         return (
           <Box
