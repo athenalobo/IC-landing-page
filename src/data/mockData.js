@@ -90,7 +90,7 @@ export const applications = [
     "id": 5,
     "name": "deep-track_5",
     "ownerName": "Olivier Bonsignour",
-    "status": "Analysis Complete",
+    "status": "Analysis complete",
     "statusColor": "blue",
     "linesOfCode": 2_134_567,
     "lastAction": "2/16/2025, 10:30 AM",
