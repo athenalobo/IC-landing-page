@@ -3,8 +3,8 @@ import { Box, keyframes } from '@mui/material';
 import { Compass, Loader2 } from 'lucide-react';
 import NavigationBar from './NavigationBar';
 import DashboardGrid from './DashboardGrid';
+import ImprovementGrid from './ImprovementGrid';
 
-// Define animations
 const float = keyframes`
   0%, 100% { transform: translateY(0) translateX(0); }
   25% { transform: translateY(-20px) translateX(10px); }
@@ -17,6 +17,60 @@ const pulse = keyframes`
   50% { opacity: 0.6; }
 `;
 
+const PlaceholderView = () => (
+  <Box sx={{
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: 'linear-gradient(180deg, #0a0a0a 0%, #121212 100%)',
+  }}>
+    {/* Ambient glow */}
+    <Box sx={{
+      position: 'absolute',
+      inset: 0,
+      background: 'radial-gradient(circle at 50% 50%, rgba(139,92,246,0.1), transparent 70%)',
+    }} />
+    
+    {/* Content */}
+    <Box sx={{
+      position: 'relative',
+      textAlign: 'center',
+      zIndex: 1,
+    }}>
+      <Compass 
+        size={100}
+        style={{
+          color: '#8b5cf6',
+          marginBottom: '2rem',
+          filter: 'drop-shadow(0 0 20px rgba(139,92,246,0.3))',
+        }}
+      />
+      <Box sx={{
+        fontSize: '2rem',
+        fontWeight: 'bold',
+        color: 'white',
+        mb: 2,
+      }}>
+        Coming Soon
+      </Box>
+      <Box sx={{
+        fontSize: '1.1rem',
+        color: 'rgba(255,255,255,0.6)',
+        maxWidth: '500px',
+        px: 3,
+      }}>
+        We're working on something exciting. This feature will be available in the next update.
+      </Box>
+    </Box>
+  </Box>
+);
+
 const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showContent, setShowContent] = useState(false);
@@ -26,17 +80,14 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
       setIsLoading(true);
       setShowContent(false);
       
-      // Show loader for 500ms
       const loaderTimer = setTimeout(() => {
         setIsLoading(false);
         setShowContent(true);
       }, 500);
 
-      return () => {
-        clearTimeout(loaderTimer);
-      };
+      return () => clearTimeout(loaderTimer);
     }
-  }, [selectedApp?.name]); // Only trigger on app name change
+  }, [selectedApp?.name]);
 
   if (!selectedApp) {
     return (
@@ -51,7 +102,6 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
         position: 'relative',
         overflow: 'hidden',
       }}>
-        {/* Ambient glow effect */}
         <Box sx={{
           position: 'absolute',
           inset: 0,
@@ -59,7 +109,6 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
           pointerEvents: 'none',
         }} />
 
-        {/* Floating particles */}
         {[...Array(20)].map((_, i) => (
           <Box
             key={i}
@@ -107,12 +156,26 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
             lineHeight: 1.7,
           }}>
             Discover new perspectives on your software.
-Let us navigate the uncharted territories of your codebase together.
+            Let us navigate the uncharted territories of your codebase together.
           </Box>
         </Box>
       </Box>
     );
   }
+
+  const renderContent = () => {
+    switch (activeSection) {
+      case 'improve':
+        return <ImprovementGrid />;
+      case 'view':
+        return <DashboardGrid />;
+      case 'impact':
+      case 'search':
+        return <PlaceholderView />;
+      default:
+        return <DashboardGrid />;
+    }
+  };
 
   return (
     <Box sx={{
@@ -122,7 +185,6 @@ Let us navigate the uncharted territories of your codebase together.
       background: 'linear-gradient(180deg, #000000 0%, #121212 100%)',
       overflow: 'hidden',
     }}>
-      {/* Header */}
       <Box sx={{
         borderBottom: 1,
         borderColor: 'grey.800',
@@ -149,12 +211,11 @@ Let us navigate the uncharted territories of your codebase together.
         />
       </Box>
 
-      {/* Main content area */}
       <Box sx={{
         flex: 1,
+        position: 'relative',
         overflowY: 'auto',
         overflowX: 'hidden',
-        position: 'relative',
         '&::-webkit-scrollbar': {
           width: '8px',
         },
@@ -169,7 +230,7 @@ Let us navigate the uncharted territories of your codebase together.
           },
         },
       }}>
-        {isLoading && (
+        {isLoading ? (
           <Box sx={{
             position: 'absolute',
             top: '50%',
@@ -184,13 +245,17 @@ Let us navigate the uncharted territories of your codebase together.
               }}
             />
           </Box>
+        ) : (
+          <Box sx={{
+            opacity: showContent ? 1 : 0,
+            transition: 'opacity 0.2s ease-in-out',
+            height: '100%', // Ensure full height
+            width: '100%',  // Ensure full width
+            position: 'relative',
+          }}>
+            {renderContent()}
+          </Box>
         )}
-        <Box sx={{
-          opacity: showContent ? 1 : 0,
-          transition: 'opacity 0.2s ease-in-out',
-        }}>
-          <DashboardGrid />
-        </Box>
       </Box>
     </Box>
   );

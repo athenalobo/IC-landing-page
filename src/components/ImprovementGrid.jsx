@@ -1,80 +1,80 @@
-
-// ImprovementGrid.jsx
 import React from 'react';
 import { Box } from '@mui/material';
+import { AlertTriangle, Zap, Shield, Cloud, Box as BoxIcon, Leaf } from 'lucide-react';
+import CardWrapper from './CardWrapper';
 
 const ImprovementGrid = () => {
   const categories = [
     {
-      title: 'Security Flaws',
+      title: 'Security',
       count: 12,
+      icon: Shield,
       color: '#8b5cf6',
       progressWidth: '90%',
       items: [
-        { name: 'SQL Injection Vulnerabilities', status: 'Critical', detail: '4 issues', statusColor: '#ef4444' },
-        { name: 'Insecure Authentication', status: null, detail: null },
-        { name: 'XSS Exposures', status: null, detail: '3 cases', detailColor: '#eab308' },
-        { name: 'CSRF Protections', status: null, detail: 'Missing', detailColor: '#eab308' }
+        { name: 'SQL Injection', detail: '4 High Risk', detailColor: '#ef4444' },
+        { name: 'Authentication', detail: '3 Medium Risk', detailColor: '#eab308' },
+        { name: 'Data Encryption', detail: '5 Low Risk', detailColor: '#22c55e' }
       ]
     },
     {
-      title: 'Performance Issues',
+      title: 'Performance',
       count: 8,
+      icon: Zap,
       color: '#eab308',
       progressWidth: '75%',
       items: [
-        { name: 'N+1 Query Problems', detail: '3 found' },
-        { name: 'Memory Leaks', detail: '2 potential' },
-        { name: 'Connection Pooling', detail: 'Inefficient', detailColor: '#eab308' },
-        { name: 'Cache Usage', detail: 'Suboptimal' }
+        { name: 'Database Queries', detail: '3 N+1 Issues' },
+        { name: 'Memory Management', detail: '2 Memory Leaks' },
+        { name: 'Response Time', detail: '>2s in 3 APIs' }
       ]
     },
     {
-      title: 'Reliability Flaws',
-      count: 5,
-      color: '#3b82f6',
+      title: 'Technical Debt',
+      count: 15,
+      icon: AlertTriangle,
+      color: '#ef4444',
+      progressWidth: '85%',
+      items: [
+        { name: 'Dead Code', detail: '145 LOC' },
+        { name: 'Code Duplication', detail: '8 Instances' },
+        { name: 'Legacy Patterns', detail: '4 Components' }
+      ]
+    },
+    {
+      title: 'Cloud Architecture',
+      count: 6,
+      icon: Cloud,
+      color: '#6366f1',
       progressWidth: '45%',
       items: [
-        { name: 'Exception Handling', detail: '2 issues' },
-        { name: 'Transaction Management', detail: '1 flaw' },
-        { name: 'Resource Cleanup', detail: '2 cases' },
-        { name: 'Error Recovery', detail: 'Partial' }
+        { name: 'Stateless Design', detail: '2 Violations' },
+        { name: 'Scalability', detail: '3 Bottlenecks' },
+        { name: 'Resilience', detail: '1 SPOF' }
       ]
     },
     {
-      title: 'Cloud Maturity',
-      count: 3,
-      color: '#6366f1',
+      title: 'Best Practices',
+      count: 9,
+      icon: BoxIcon,
+      color: '#ec4899',
       progressWidth: '65%',
       items: [
-        { name: 'Cloud-Native Features', detail: 'Limited' },
-        { name: 'Scalability Readiness', detail: 'Moderate', detailColor: '#eab308' },
-        { name: 'Service Discovery', detail: 'Missing', detailColor: '#ef4444' },
-        { name: 'Load Balancing', detail: 'Basic' }
+        { name: 'Coding Standards', detail: '5 Violations' },
+        { name: 'Documentation', detail: '3 Missing' },
+        { name: 'Test Coverage', detail: '72%' }
       ]
     },
     {
-      title: 'Containerization',
-      count: 0,
-      color: '#ec4899',
-      progressWidth: '0%',
-      items: [
-        { name: 'Docker Support', detail: 'Not Found', detailColor: '#ef4444' },
-        { name: 'Container Config', detail: 'Missing', detailColor: '#ef4444' },
-        { name: 'Resource Limits', detail: 'Undefined', detailColor: '#eab308' },
-        { name: 'Image Security', detail: 'Not Checked', detailColor: '#eab308' }
-      ]
-    },
-    {
-      title: 'Green Computing',
-      count: 4,
+      title: 'Resource Usage',
+      count: 7,
+      icon: Leaf,
       color: '#22c55e',
-      progressWidth: '35%',
+      progressWidth: '55%',
       items: [
-        { name: 'Resource Efficiency', detail: 'Moderate', detailColor: '#eab308' },
-        { name: 'Energy Optimization', detail: '2 issues' },
-        { name: 'Idle Resource Usage', detail: 'High', detailColor: '#ef4444' },
-        { name: 'Code Efficiency', detail: 'Fair' }
+        { name: 'CPU Utilization', detail: '2 Hotspots' },
+        { name: 'Memory Leaks', detail: '3 Detected' },
+        { name: 'Thread Usage', detail: '2 Issues' }
       ]
     }
   ];
@@ -85,103 +85,116 @@ const ImprovementGrid = () => {
       gridTemplateColumns: 'repeat(2, 1fr)',
       gap: 3,
       p: 3,
-      width: '100%',
-      boxSizing: 'border-box',
-      backgroundColor: '#0a0a0a',
+      maxWidth: '100%',
+      margin: '0 auto'
     }}>
-      {categories.map((category) => (
-        <Box
-          key={category.title}
-          sx={{
-            backgroundColor: 'rgba(15, 23, 42, 0.3)',
-            borderRadius: '8px',
-            overflow: 'hidden',
-          }}
-        >
-          <Box sx={{
-            p: 2,
-            borderBottom: '1px solid rgba(255,255,255,0.1)',
-          }}>
+      {categories.map((category) => {
+        const Icon = category.icon;
+        return (
+          <Box
+            key={category.title}
+            sx={{
+              backgroundColor: 'rgba(15, 23, 42, 0.3)',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              border: '1px solid rgba(255,255,255,0.05)',
+              backdropFilter: 'blur(10px)',
+              position: 'relative',
+            }}
+          >
             <Box sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              mb: 1.5,
+              p: 3,
+              borderBottom: '1px solid rgba(255,255,255,0.1)',
+              position: 'sticky',
+              top: 0,
+              backgroundColor: 'rgba(15, 23, 42, 0.95)',
+              backdropFilter: 'blur(10px)',
+              zIndex: 1,
             }}>
               <Box sx={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 2,
-                color: 'white',
-                fontSize: '0.9rem',
-                fontWeight: 500,
+                justifyContent: 'space-between',
+                mb: 2,
               }}>
-                <Box component="span">{category.title}</Box>
-                <Box component="span" sx={{
-                  color: category.color,
-                  fontSize: '0.9rem',
-                }}>{category.count}</Box>
-              </Box>
-            </Box>
-            <Box sx={{
-              width: '100%',
-              height: '3px',
-              backgroundColor: 'rgba(255,255,255,0.1)',
-              borderRadius: '4px',
-            }}>
-              <Box sx={{
-                width: category.progressWidth,
-                height: '100%',
-                backgroundColor: category.color,
-                borderRadius: '4px',
-              }} />
-            </Box>
-          </Box>
-          <Box>
-            {category.items.map((item, index) => (
-              <Box
-                key={index}
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  p: 2,
-                  borderBottom: index !== category.items.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none',
-                }}
-              >
-                <Box component="span" sx={{
-                  color: 'rgba(255,255,255,0.7)',
-                  fontSize: '0.9rem',
-                }}>
-                  {item.name}
-                </Box>
                 <Box sx={{
                   display: 'flex',
-                  gap: 2,
                   alignItems: 'center',
+                  gap: 2,
                 }}>
-                  {item.status && (
+                  <Icon size={24} color={category.color} />
+                  <Box sx={{
+                    display: 'flex',
+                    alignItems: 'baseline',
+                    gap: 2,
+                  }}>
                     <Box component="span" sx={{
-                      color: item.statusColor || 'white',
-                      fontSize: '0.9rem',
+                      color: 'white',
+                      fontSize: '1.1rem',
+                      fontWeight: 600,
                     }}>
-                      {item.status}
+                      {category.title}
                     </Box>
-                  )}
-                  {item.detail && (
                     <Box component="span" sx={{
-                      color: item.detailColor || 'rgba(255,255,255,0.5)',
-                      fontSize: '0.9rem',
+                      color: category.color,
+                      fontSize: '1.5rem',
+                      fontWeight: 700,
                     }}>
-                      {item.detail}
+                      {category.count}
                     </Box>
-                  )}
+                  </Box>
                 </Box>
               </Box>
-            ))}
+              <Box sx={{
+                width: '100%',
+                height: '4px',
+                backgroundColor: 'rgba(255,255,255,0.1)',
+                borderRadius: '4px',
+              }}>
+                <Box sx={{
+                  width: category.progressWidth,
+                  height: '100%',
+                  backgroundColor: category.color,
+                  borderRadius: '4px',
+                  transition: 'width 0.5s ease-in-out',
+                }} />
+              </Box>
+            </Box>
+            <Box>
+              {category.items.map((item, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    p: 2.5,
+                    borderBottom: index !== category.items.length - 1 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255,255,255,0.02)',
+                    },
+                  }}
+                >
+                  <Box component="span" sx={{
+                    color: 'rgba(255,255,255,0.7)',
+                    fontSize: '0.9rem',
+                    fontWeight: 500,
+                  }}>
+                    {item.name}
+                  </Box>
+                  <Box component="span" sx={{
+                    color: item.detailColor || 'rgba(255,255,255,0.5)',
+                    fontSize: '0.9rem',
+                    fontWeight: 500,
+                  }}>
+                    {item.detail}
+                  </Box>
+                </Box>
+              ))}
+            </Box>
           </Box>
-        </Box>
-      ))}
+        );
+      })}
     </Box>
   );
 };
