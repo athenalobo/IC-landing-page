@@ -164,7 +164,7 @@ const ApplicationList = ({ applications = [], selectedApp, onSelectApp }) => {
 
   return (
      <Box sx={{ 
-      width: '500px',  // Fixed width to 584px
+      width: '450px',  // Fixed width to 584px
       bgcolor: 'grey.900',
       display: 'flex',
       flexDirection: 'column',
