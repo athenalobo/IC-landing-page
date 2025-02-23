@@ -24,6 +24,8 @@ const PlaceholderView = () => (
     left: 0,
     right: 0,
     bottom: 0,
+    width: '100%',
+    height: '100%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -184,6 +186,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
       flexDirection: 'column',
       background: 'linear-gradient(180deg, #000000 0%, #121212 100%)',
       overflow: 'hidden',
+      width: '100%',
     }}>
       <Box sx={{
         borderBottom: 1,
@@ -216,6 +219,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
         position: 'relative',
         overflowY: 'auto',
         overflowX: 'hidden',
+        width: '100%',
         '&::-webkit-scrollbar': {
           width: '8px',
         },
@@ -249,8 +253,8 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
           <Box sx={{
             opacity: showContent ? 1 : 0,
             transition: 'opacity 0.2s ease-in-out',
-            height: '100%', // Ensure full height
-            width: '100%',  // Ensure full width
+            height: '100%',
+            width: '100%',
             position: 'relative',
           }}>
             {renderContent()}
