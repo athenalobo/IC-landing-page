@@ -178,7 +178,23 @@ const ApplicationList = ({ applications = [], selectedApp, onSelectApp }) => {
           alignItems: 'center', 
           mb: 2
         }}>
-          <Typography variant="h6" color="white">Applications</Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <Typography variant="h6" color="white">Applications</Typography>
+            <Box sx={{
+              bgcolor: '#8b5cf6',
+              color: 'white',
+              borderRadius: '50%',
+              width: 24,
+              height: 24,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+            }}>
+              {applications.length}
+            </Box>
+            </Box>
           <Button
             variant="contained"
             color="primary"
