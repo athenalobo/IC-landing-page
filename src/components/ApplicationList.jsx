@@ -6,9 +6,20 @@ import {
   Typography, 
   Button, 
   InputBase,
+  Dialog,
   styled
 } from '@mui/material';
 import { Add, Search } from '@mui/icons-material';
+import { keyframes } from '@mui/system';
+import { Compass } from 'lucide-react';
+
+const float = keyframes`
+  0%, 100% { transform: translateY(0) translateX(0); }
+  25% { transform: translateY(-20px) translateX(10px); }
+  50% { transform: translateY(-10px) translateX(-10px); }
+  75% { transform: translateY(-30px) translateX(5px); }
+`;
+
 
 const getInitials = (name) => {
   return name
@@ -141,6 +152,7 @@ const StyledCard = styled(Box)(({ theme, selected }) => ({
 const ApplicationList = ({ applications = [], selectedApp, onSelectApp }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showOnlyMine, setShowOnlyMine] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const filteredApps = useMemo(() => {
     if (!applications) return [];
@@ -168,6 +180,7 @@ const ApplicationList = ({ applications = [], selectedApp, onSelectApp }) => {
   }, [applications, showOnlyMine]);
 
   return (
+    <>
      <Box sx={{ 
       width: '450px',  // Fixed width to 584px
       bgcolor: 'grey.900',
@@ -200,19 +213,20 @@ const ApplicationList = ({ applications = [], selectedApp, onSelectApp }) => {
               {displayCount}
             </Box>
           </Box>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<Add />}
-            size="small"
-            sx={{
-              borderRadius: 1,
-              textTransform: 'none',
-              px: 2,
-            }}
-          >
-            New App
-          </Button>
+           <Button
+              variant="contained"
+              color="primary"
+              startIcon={<Add />}
+              size="small"
+              onClick={() => setIsDialogOpen(true)}
+              sx={{
+                borderRadius: 1,
+                textTransform: 'none',
+                px: 2,
+              }}
+            >
+              New App
+            </Button>
         </Box>
 
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -302,6 +316,82 @@ const ApplicationList = ({ applications = [], selectedApp, onSelectApp }) => {
         ))}
       </Box>
     </Box>
+     <Dialog
+        open={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        maxWidth="md"
+        fullWidth
+        PaperProps={{
+          sx: {
+            bgcolor: 'transparent',
+            boxShadow: 'none',
+            overflow: 'hidden',
+          }
+        }}
+      >
+        <Box sx={{
+          background: 'linear-gradient(180deg, #0a0a0a 0%, #121212 100%)',
+          p: 4,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          position: 'relative',
+          minHeight: '400px',
+        }}>
+          {/* Ambient glow */}
+          <Box sx={{
+            position: 'absolute',
+            inset: 0,
+            background: 'radial-gradient(circle at 50% 50%, rgba(139,92,246,0.1), transparent 70%)',
+            pointerEvents: 'none',
+          }} />
+          
+          {/* Floating particles */}
+          {[...Array(20)].map((_, i) => (
+            <Box
+              key={i}
+              sx={{
+                position: 'absolute',
+                width: '4px',
+                height: '4px',
+                backgroundColor: 'rgba(139,92,246,0.2)',
+                borderRadius: '50%',
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animation: `${float} ${Math.random() * 10 + 10}s linear infinite`,
+                animationDelay: `${Math.random() * 5}s`,
+              }}
+            />
+          ))}
+
+          <Box sx={{ position: 'relative', textAlign: 'center', zIndex: 1 }}>
+            <Compass 
+              size={100}
+              style={{
+                color: '#8b5cf6',
+                marginBottom: '2rem',
+                filter: 'drop-shadow(0 0 20px rgba(139,92,246,0.3))',
+              }}
+            />
+            <Typography variant="h4" sx={{
+              color: 'white',
+              mb: 2,
+              fontWeight: 'bold',
+            }}>
+              Coming Soon
+            </Typography>
+            <Typography sx={{
+              color: 'rgba(255,255,255,0.6)',
+              maxWidth: '500px',
+              fontSize: '1.1rem',
+            }}>
+              We're working on something exciting. This feature will be available in the next update.
+            </Typography>
+          </Box>
+        </Box>
+      </Dialog>
+    </>
   );
 };
 
