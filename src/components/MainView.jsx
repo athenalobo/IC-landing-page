@@ -56,6 +56,11 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
           background: 'radial-gradient(circle at 50% 50%, rgba(139,92,246,0.1), transparent 70%)',
           pointerEvents: 'none',
         }} />
+        <Box sx={{
+      position: 'absolute',
+      inset: 0,
+      background: 'radial-gradient(circle at 50% 50%, rgba(139,92,246,0.1), transparent 70%)',
+    }} />
 
         {[...Array(20)].map((_, i) => (
           <Box

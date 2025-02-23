@@ -5,7 +5,6 @@ import {
   ListItemIcon, 
   ListItemText, 
   Divider, 
-  Badge, 
   Typography 
 } from '@mui/material';
 import {
@@ -21,9 +20,15 @@ import {
 } from '@mui/icons-material';
 import { SidebarContainer, LogoBox } from './styled/StyledComponents';
 
-const Sidebar = ({ isExpanded, onMouseEnter, onMouseLeave }) => {
+const Sidebar = ({ 
+  isExpanded, 
+  onMouseEnter, 
+  onMouseLeave, 
+  selectedMenuItem,
+  onMenuItemSelect 
+}) => {
   const mainMenuItems = [
-    { icon: <Layers />, text: 'Applications', selected: true },
+    { icon: <Layers />, text: 'Applications' },
     { icon: <Timeline />, text: 'Analysis tools' },
     { icon: <People />, text: 'Members' },
     { icon: <CreditCard />, text: 'Subscription overview' },
@@ -73,37 +78,42 @@ const Sidebar = ({ isExpanded, onMouseEnter, onMouseLeave }) => {
       </LogoBox>
       <br/>
       <List sx={{ p: 0 }}>
-        {mainMenuItems.map((item, index) => (
+        {mainMenuItems.map((item) => (
           <ListItem
             button
-            key={index}
+            key={item.text}
+            onClick={() => onMenuItemSelect(item.text)}
             sx={{
               ...listItemStyles,
-              bgcolor: item.selected ? 'rgba(147, 51, 234, 0.1)' : 'transparent',
+              bgcolor: selectedMenuItem === item.text ? 'rgba(147, 51, 234, 0.1)' : 'transparent',
             }}
           >
-            <ListItemIcon sx={getListItemIconStyles(item.selected)}>
+            <ListItemIcon sx={getListItemIconStyles(selectedMenuItem === item.text)}>
               {item.icon}
             </ListItemIcon>
             <ListItemText
               primary={item.text}
-              sx={getListItemTextStyles(item.selected)}
+              sx={getListItemTextStyles(selectedMenuItem === item.text)}
             />
           </ListItem>
         ))}
         <Divider sx={{ my: 2, bgcolor: 'grey.800' }} />
-        {bottomMenuItems.map((item, index) => (
+        {bottomMenuItems.map((item) => (
           <ListItem
             button
-            key={index}
-            sx={listItemStyles}
+            key={item.text}
+            onClick={() => onMenuItemSelect(item.text)}
+            sx={{
+              ...listItemStyles,
+              bgcolor: selectedMenuItem === item.text ? 'rgba(147, 51, 234, 0.1)' : 'transparent',
+            }}
           >
-            <ListItemIcon sx={getListItemIconStyles(false)}>
+            <ListItemIcon sx={getListItemIconStyles(selectedMenuItem === item.text)}>
               {item.icon}
             </ListItemIcon>
             <ListItemText
               primary={item.text}
-              sx={getListItemTextStyles(false)}
+              sx={getListItemTextStyles(selectedMenuItem === item.text)}
             />
           </ListItem>
         ))}
