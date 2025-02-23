@@ -159,7 +159,7 @@ const WelcomeView = ({ applications = [] }) => {
               textTransform: 'uppercase',
               letterSpacing: '0.05em'
             }}>
-              Complete
+              Analyzed
             </Typography>
           </Box>
 
@@ -178,7 +178,7 @@ const WelcomeView = ({ applications = [] }) => {
               textTransform: 'uppercase',
               letterSpacing: '0.05em'
             }}>
-              Complete
+              Profiled
             </Typography>
           </Box>
 
