@@ -77,7 +77,7 @@ const ConfigPage = () => {
         padding: 2,
         zIndex: 1,
       }}>
-        <Compass 
+        {/* <Compass 
           size={48}
           style={{
             color: '#8b5cf6',
@@ -93,7 +93,7 @@ const ConfigPage = () => {
           textAlign: 'center',
         }}>
           Configuration Settings
-        </Typography>
+        </Typography> */}
 
         <Stack spacing={1.5} sx={{ width: '100%', maxWidth: '400px' }}>
           <Card sx={{

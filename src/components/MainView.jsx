@@ -6,6 +6,7 @@ import {
   Typography,
   List,
   ListItem,
+  Link,
   keyframes 
 } from '@mui/material';
 import { Compass, Loader2 } from 'lucide-react';
@@ -110,8 +111,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
   }
 
   const renderContent = () => {
-
-     if (activeSection === 'configuration') {
+    if (activeSection === 'configuration') {
       return <ConfigPage />;
     }
 
@@ -142,8 +142,8 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
           disabled={!isNavigationEnabled('improve')} 
           visibleCards={visibleCards}
         />;
-        case 'configuration':
-        return <ConfigPage/>
+      case 'configuration':
+        return <ConfigPage />;
       case 'view':
         return <DashboardGrid 
           disabled={!isNavigationEnabled('view')} 
@@ -199,7 +199,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
         backgroundColor: 'rgba(0,0,0,0.7)',
         backdropFilter: 'blur(8px)',
       }}>
-        <Box sx={{ mb: 2 }}>
+        <Box sx={{ mb: selectedApp?.status === 'Error' ? 3 : 2 }}>
           <Typography variant="h1" sx={{
             color: 'white',
             margin: 0,
@@ -213,9 +213,45 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
             mt: 1
           }}>
             <StatusChip status={selectedApp.status}>
-                    {selectedApp.status}
-                  </StatusChip>
+              {selectedApp.status}
+            </StatusChip>
           </Typography>
+          
+          {selectedApp.status === 'Error' && (
+            <Alert 
+              severity="error"
+              sx={{
+                mt: 2,
+                backgroundColor: 'rgba(211, 47, 47, 0.1)',
+                color: '#ff4444',
+                '& .MuiAlert-icon': {
+                  color: '#ff4444'
+                },
+                '& .MuiAlert-message': {
+                  width: '100%'
+                },
+                '& a': {
+                  color: '#ff8a80',
+                  textDecoration: 'underline',
+                  '&:hover': {
+                    color: '#ff5252'
+                  }
+                }
+              }}
+            >
+              <AlertTitle sx={{ color: '#ff4444', fontWeight: 'bold' }}>
+                Analysis Error
+              </AlertTitle>
+              Deep Analysis encountered an error while generating the CSV computation. CAST Software has been informed and will contact you at the earliest. You can stay updated using - {' '}
+              <Link 
+                href="https://castsoftware.zendesk.com/tickets/99999"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Zendesk ticket
+              </Link>
+            </Alert>
+          )}
         </Box>
         <NavigationBar
           activeSection={activeSection}
