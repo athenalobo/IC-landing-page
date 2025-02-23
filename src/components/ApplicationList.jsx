@@ -142,8 +142,6 @@ const ApplicationList = ({ applications = [], selectedApp, onSelectApp }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showOnlyMine, setShowOnlyMine] = useState(false);
 
-  console.log(searchQuery)
-
   const filteredApps = useMemo(() => {
     if (!applications) return [];
     
@@ -161,6 +159,13 @@ const ApplicationList = ({ applications = [], selectedApp, onSelectApp }) => {
       return nameMatches && isMyApp;
     });
   }, [applications, searchQuery, showOnlyMine]);
+
+  const displayCount = useMemo(() => {
+    if (showOnlyMine) {
+      return applications.filter(app => app.ownerName === "Olivier Bonsignour").length;
+    }
+    return applications.length;
+  }, [applications, showOnlyMine]);
 
   return (
      <Box sx={{ 
@@ -192,9 +197,9 @@ const ApplicationList = ({ applications = [], selectedApp, onSelectApp }) => {
               fontSize: '0.75rem',
               fontWeight: 600,
             }}>
-              {applications.length}
+              {displayCount}
             </Box>
-            </Box>
+          </Box>
           <Button
             variant="contained"
             color="primary"
