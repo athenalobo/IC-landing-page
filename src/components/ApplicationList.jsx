@@ -47,7 +47,7 @@ const getAvatarColor = (initials) => {
   return initials === 'OB' ? colorMap.OB : (colorMap.default[initials[0]] || '#6b7280');
 };
 
-const StatusChip = styled(Box)(({ status }) => {
+export const StatusChip = styled(Box)(({ status }) => {
   const statusColors = {
     'analysis complete': {
       color: '#4ade80',
@@ -112,11 +112,22 @@ const StatusChip = styled(Box)(({ status }) => {
 const StyledSearchInput = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
-  padding: '8px 12px',
-  backgroundColor: theme.palette.grey[800],
-  borderRadius: theme.shape.borderRadius,
+  padding: '2px 10px',
+  backgroundColor: 'rgba(30, 30, 30, 0.6)',
+  borderRadius: '8px',
+  border: '1px solid rgba(255, 255, 255, 0.08)',
+  transition: 'all 0.2s ease-in-out',
+  
   '&:hover': {
-    backgroundColor: theme.palette.grey[750],
+    backgroundColor: 'rgba(40, 40, 40, 0.8)',
+    border: '1px solid rgba(255, 255, 255, 0.12)',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
+  },
+
+  '&:focus-within': {
+    backgroundColor: 'rgba(45, 45, 45, 0.9)',
+    border: '1px solid rgba(255, 255, 255, 0.16)',
+    boxShadow: '0 2px 12px rgba(0, 0, 0, 0.2)'
   }
 }));
 

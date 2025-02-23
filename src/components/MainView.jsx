@@ -13,6 +13,7 @@ import NavigationBar from './NavigationBar';
 import DashboardGrid from './DashboardGrid';
 import ImprovementGrid from './ImprovementGrid';
 import ImpactImg from '../assets/image.png';
+import { StatusChip } from './ApplicationList';
 import ConfigPage from './ConfigPage';
 
 const float = keyframes`
@@ -279,7 +280,9 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
             color: 'grey.500',
             mt: 1
           }}>
-            Status: {selectedApp.status}
+            <StatusChip status={selectedApp.status}>
+                    {selectedApp.status}
+                  </StatusChip>
           </Typography>
         </Box>
         <NavigationBar
