@@ -10,7 +10,12 @@ import ObjectTypeCard from './cards/ObjectTypeCard';
 import DataManagementCard from './cards/DataManagementCard';
 import CallGraphsCard from './cards/CallGraphsCard';
 
-const DashboardGrid = () => {
+const DashboardGrid = ({ disabled, visibleCards }) => {
+
+  const shouldShowCard = (cardId) => {
+    if (visibleCards !== 'all') return true;
+  };
+
   const [hoveredCard, setHoveredCard] = useState(null);
 
   const cardProps = {
@@ -28,13 +33,16 @@ const DashboardGrid = () => {
       maxWidth: '100%',
       margin: '0 auto'
     }}>
-      <SummaryCard {...cardProps} icon={Activity} />
+      {shouldShowCard('summary') ? (
+      <SummaryCard {...cardProps} icon={Activity} />) : (<>
+        <SummaryCard {...cardProps} icon={Activity} />
       <TechnologiesCard {...cardProps} icon={FileCode} />
       <ArchitectureCard {...cardProps} icon={Layout} />
       <SavedViewsCard {...cardProps} icon={BookmarkIcon} />
       <ObjectTypeCard {...cardProps} icon={FolderGit2} />
       <DataManagementCard {...cardProps} icon={Database} />
-      <CallGraphsCard {...cardProps} icon={Share2} />
+      <CallGraphsCard {...cardProps} icon={Share2} /></>)}
+      {/* ) */}
     </Box>
   );
 };

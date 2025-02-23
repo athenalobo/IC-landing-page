@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Box, keyframes } from '@mui/material';
+import { 
+  Box, 
+  Alert,
+  AlertTitle,
+  Typography,
+  List,
+  ListItem,
+  keyframes 
+} from '@mui/material';
 import { Compass, Loader2 } from 'lucide-react';
 import NavigationBar from './NavigationBar';
 import DashboardGrid from './DashboardGrid';
 import ImprovementGrid from './ImprovementGrid';
-import { PlaceholderView } from './PlaceholderView';
-import impactImage from '../assets/image.png';
 
 const float = keyframes`
   0%, 100% { transform: translateY(0) translateX(0); }
   25% { transform: translateY(-20px) translateX(10px); }
   50% { transform: translateY(-10px) translateX(-10px); }
   75% { transform: translateY(-30px) translateX(5px); }
-`;
-
-const pulse = keyframes`
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
 `;
 
 const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
@@ -37,6 +38,67 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
     }
   }, [selectedApp?.name]);
 
+  // Helper function to determine if navigation should be enabled
+  const isNavigationEnabled = (section) => {
+    if (!selectedApp) return false;
+    
+    switch (selectedApp.status) {
+      case 'Analysis complete':
+        return true;
+      case 'Profiling complete':
+      case 'in progress':
+      case 'Error':
+        return section === 'view';
+      case 'Configuration Pending':
+        return false;
+      default:
+        return false;
+    }
+  };
+
+  // Helper function to determine what cards should be visible
+  const getVisibleCards = () => {
+    if (!selectedApp) return [];
+    
+    switch (selectedApp.status) {
+      case 'Analysis complete':
+        return 'all';
+      case 'Profiling complete':
+      case 'in progress':
+      case 'Error':
+        return ['summary'];
+      case 'Configuration Pending':
+      default:
+        return [];
+    }
+  };
+
+  // Configuration pending placeholder
+  const ConfigurationPlaceholder = () => (
+    <Box sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height: '100%',
+      p: 4
+    }}>
+      <Alert severity="info" sx={{ maxWidth: '600px' }}>
+        <AlertTitle>Configuration Required</AlertTitle>
+        <Typography variant="body1" paragraph>
+          To analyze your application, please complete the following steps in GitHub:
+        </Typography>
+        <List sx={{ pl: 2 }}>
+          <ListItem>1. Navigate to your repository settings</ListItem>
+          <ListItem>2. Enable GitHub Actions</ListItem>
+          <ListItem>3. Add the required configuration file to your repository</ListItem>
+          <ListItem>4. Trigger the initial analysis</ListItem>
+        </List>
+      </Alert>
+    </Box>
+  );
+
+  // Welcome screen when no app is selected
   if (!selectedApp) {
     return (
       <Box sx={{
@@ -56,11 +118,6 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
           background: 'radial-gradient(circle at 50% 50%, rgba(139,92,246,0.1), transparent 70%)',
           pointerEvents: 'none',
         }} />
-        <Box sx={{
-      position: 'absolute',
-      inset: 0,
-      background: 'radial-gradient(circle at 50% 50%, rgba(139,92,246,0.1), transparent 70%)',
-    }} />
 
         {[...Array(20)].map((_, i) => (
           <Box
@@ -93,7 +150,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
           maxWidth: '600px',
           px: 3,
         }}>
-          <Box component="h2" sx={{
+          <Typography variant="h2" sx={{
             fontSize: '2.5rem',
             fontWeight: 'bold',
             mb: 3,
@@ -102,32 +159,82 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
             WebkitTextFillColor: 'transparent',
           }}>
             Select an application
-          </Box>
-          <Box component="p" sx={{
+          </Typography>
+          <Typography variant="body1" sx={{
             color: 'rgba(255,255,255,0.7)',
             fontSize: '1.125rem',
             lineHeight: 1.7,
           }}>
             Discover new perspectives on your software.
             Let us navigate the uncharted territories of your codebase together.
-          </Box>
+          </Typography>
         </Box>
       </Box>
     );
   }
 
   const renderContent = () => {
+    if (selectedApp.status === 'Configuration Pending') {
+      return <ConfigurationPlaceholder />;
+    }
+
+    if (!isNavigationEnabled(activeSection)) {
+      return (
+        <Box sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100%'
+        }}>
+          <Alert severity="warning" color='#8b5cf6' sx={{ maxWidth: '500px', color: '#8b5cf6', backgroundColor: 'rgba(139,92,246,0.15)' }}>
+            This section is not available until deep analysis is complete.
+          </Alert>
+        </Box>
+      );
+    }
+
+    const visibleCards = getVisibleCards();
+
     switch (activeSection) {
       case 'improve':
-        return <ImprovementGrid />;
+        return <ImprovementGrid 
+          disabled={!isNavigationEnabled('improve')} 
+          visibleCards={visibleCards}
+        />;
       case 'view':
-        return <DashboardGrid />;
+        return <DashboardGrid 
+          disabled={!isNavigationEnabled('view')} 
+          visibleCards={visibleCards}
+        />;
       case 'impact':
       case 'search':
-        return <img width={'100%'} src={impactImage} alt="Impact View" />;
+        if (visibleCards === 'all') {
+          return (
+            <Box sx={{ p: 2 }}>
+              <img 
+                width="100%" 
+                src="/api/placeholder/800/600" 
+                alt="Impact View"
+              />
+            </Box>
+          );
+        }
+        return null;
       default:
-        return <DashboardGrid />;
+        return <DashboardGrid 
+          disabled={!isNavigationEnabled('view')} 
+          visibleCards={visibleCards}
+        />;
     }
+  };
+
+  // Get only the enabled sections for the navigation
+  const getEnabledSections = () => {
+    const visibleCards = getVisibleCards();
+    if (visibleCards === 'all') {
+      return ['view', 'improve', 'impact', 'search'];
+    }
+    return ['view'];
   };
 
   return (
@@ -150,18 +257,25 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
         backdropFilter: 'blur(8px)',
       }}>
         <Box sx={{ mb: 2 }}>
-          <Box component="h1" sx={{
+          <Typography variant="h1" sx={{
             color: 'white',
             margin: 0,
             fontSize: '1.75rem',
             fontWeight: 'bold',
           }}>
             {selectedApp.name}
-          </Box>
+          </Typography>
+          <Typography variant="body2" sx={{
+            color: 'grey.500',
+            mt: 1
+          }}>
+            Status: {selectedApp.status}
+          </Typography>
         </Box>
         <NavigationBar
           activeSection={activeSection}
           onSectionChange={onSectionChange}
+          availableSections={getEnabledSections()}
         />
       </Box>
 
@@ -196,7 +310,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
               size={48}
               style={{
                 color: '#8b5cf6',
-                animation: 'spin 0.5s linear infinite',
+                animation: 'spin 1s linear infinite',
               }}
             />
           </Box>
