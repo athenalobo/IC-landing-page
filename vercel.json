@@ -1,0 +1,8 @@
+{
+  "name": "feedback-loop-1",
+  "git": {
+    "deploymentEnabled": {
+      "Feedback-loop-1": true
+    }
+  }
+}
