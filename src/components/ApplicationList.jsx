@@ -325,7 +325,7 @@ const ApplicationList = ({ applications = [], selectedApp, onSelectApp }) => {
               alignItems: 'center', 
               mb: 2
             }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, pl: 1 }}>
                 <Typography variant="h6" color="white">Applications</Typography>
                 <Box sx={{
                   bgcolor: '#8b5cf6',

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -25,6 +25,7 @@ import {
   MenuBook,
   Notifications
 } from '@mui/icons-material';
+import Logo from '../assets/Logo.svg';
 
 const Header = ({ isAdmin = false, onMenuItemSelect, activePage = 'Applications' }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -61,7 +62,7 @@ const Header = ({ isAdmin = false, onMenuItemSelect, activePage = 'Applications'
     onMenuItemSelect('Applications');
     setActiveIcon('Applications');
     window.location.reload(); // Reloads the entire page
-};
+  };
 
   // Define the active icon style
   const getIconStyle = (iconName) => ({
@@ -90,44 +91,46 @@ const Header = ({ isAdmin = false, onMenuItemSelect, activePage = 'Applications'
         sx={{ 
           height: '100%', 
           display: 'flex', 
-          alignItems: 'center' // This centers children vertically
+          alignItems: 'center', // This centers children vertically
+          px: 0, // Remove any horizontal padding at Box level
         }}
       >
         <Toolbar 
+          disableGutters // This removes the default padding
           sx={{ 
             display: 'flex', 
             justifyContent: 'space-between',
             alignItems: 'center', 
             minHeight: '48px !important', // Override MUI's default with !important
-            padding: '0 16px', // Explicit padding
+            padding: '0 10px !important', // Minimal padding with !important to override
             width: '100%',
-            height: '100%'
+            height: '100%',
+            ml: 0, 
+            mr: 0
           }}
         >
-          {/* Logo on the left */}
-          <Typography
-            variant="subtitle1"
-            component="div"
+          {/* Logo on the left - replaced text with SVG */}
+          <Box
             onClick={handleLogoClick}
             sx={{ 
-              fontWeight: 600,
-              color: '#fff',
               display: 'flex',
               alignItems: 'center',
               cursor: 'pointer',
               '&:hover': {
-                color: '#9071F3'
-              }
+                opacity: 0.9
+              },
+              ml: 0.5, // Add a tiny bit of margin to prevent logo from touching edge
             }}
           >
-            CAST Imaging
-          </Typography>
+            <img src={Logo} alt="Logo" />
+          </Box>
           
           {/* Right side icons */}
           <Box sx={{ 
             display: 'flex', 
             alignItems: 'center', 
-            gap: 1
+            gap: 0.5, // Reduce gap between icons
+            mr: 0.5 // Add a tiny bit of margin to prevent icons from touching edge
           }}>
             <Tooltip title="Applications">
               <IconButton 
@@ -164,7 +167,7 @@ const Header = ({ isAdmin = false, onMenuItemSelect, activePage = 'Applications'
               <IconButton
                 onClick={handleClick}
                 size="small"
-                sx={{ ml: 1 }}
+                sx={{ ml: 0.5 }} // Reduced from ml: 1
                 aria-controls={open ? 'account-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}

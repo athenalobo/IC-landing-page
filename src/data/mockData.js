@@ -17,10 +17,83 @@ const generateUniqueApp = (id) => {
   const randomStatusIndex = Math.floor(Math.random() * statuses.length);
   const randomOwnerIndex = Math.floor(Math.random() * ownerNames.length);
   const randomStatusColorIndex = Math.floor(Math.random() * statusColors.length);
+  
+  // App name generation with variety
+  const prefixes = ['cool', 'super', 'awesome', 'smart', 'quick', 'mega', 'ultra', 'hyper', 'swift', 'rapid'];
+  const domains = ['app', 'tool', 'service', 'system', 'platform', 'solution', 'hub', 'suite', 'core', 'base'];
+  const suffixes = ['pro', 'plus', 'lite', 'cloud', 'x', 'ai', 'next', 'one', 'go', 'io'];
+  
+  // Additional descriptive words for longer names
+  const descriptors = [
+    'enterprise', 'professional', 'advanced', 'revolutionary', 'next-generation',
+    'cutting-edge', 'innovative', 'integrated', 'distributed', 'containerized',
+    'microservice', 'serverless', 'scalable', 'high-performance', 'cloud-native'
+  ];
+  
+  // Decide if we want a short, medium, or really long name
+  const nameType = Math.random();
+  let appName = '';
+  
+  if (nameType < 0.2) {
+    // 20% chance for a really long name
+    appName += descriptors[Math.floor(Math.random() * descriptors.length)];
+    appName += '-';
+    appName += prefixes[Math.floor(Math.random() * prefixes.length)];
+    appName += '-';
+    appName += domains[Math.floor(Math.random() * domains.length)];
+    appName += '-';
+    
+    // Add 1-3 more descriptors
+    const extraDescriptors = Math.floor(Math.random() * 3) + 1;
+    for (let i = 0; i < extraDescriptors; i++) {
+      appName += descriptors[Math.floor(Math.random() * descriptors.length)];
+      appName += '-';
+    }
+    
+    appName += suffixes[Math.floor(Math.random() * suffixes.length)];
+  } else if (nameType < 0.6) {
+    // 40% chance for a medium name
+    const usePrefix = Math.random() > 0.3;
+    const useSuffix = Math.random() > 0.2; // Higher chance to use suffix
+    
+    if (usePrefix) {
+      appName += prefixes[Math.floor(Math.random() * prefixes.length)];
+      appName += '-';
+    }
+    
+    // Add a descriptor sometimes
+    if (Math.random() > 0.5) {
+      appName += descriptors[Math.floor(Math.random() * descriptors.length)];
+      appName += '-';
+    }
+    
+    appName += domains[Math.floor(Math.random() * domains.length)];
+    
+    if (useSuffix) {
+      appName += '-';
+      appName += suffixes[Math.floor(Math.random() * suffixes.length)];
+    }
+  } else {
+    // 40% chance for a short name
+    appName += domains[Math.floor(Math.random() * domains.length)];
+    
+    if (Math.random() > 0.5) {
+      appName += '-';
+      appName += suffixes[Math.floor(Math.random() * suffixes.length)];
+    }
+  }
+  
+  // Add unique identifier to ensure uniqueness
+  appName += `-${id}`;
+  
+  // Ensure name is within 64 characters
+  if (appName.length > 64) {
+    appName = appName.substring(0, 60 - id.toString().length) + `-${id}`;
+  }
 
   return {
     id: id,
-    name: `app-${id}`,
+    name: appName,
     ownerName: ownerNames[randomOwnerIndex],
     status: statuses[randomStatusIndex],
     statusColor: statusColors[randomStatusColorIndex],
