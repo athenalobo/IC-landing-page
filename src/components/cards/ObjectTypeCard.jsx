@@ -27,7 +27,7 @@ const ObjectTypeCard = ({ hoveredCard, setHoveredCard, icon }) => {
             padding: '10px',
             borderRadius: '8px',
             marginBottom: '8px',
-            backgroundColor: hoveredCard === 4 ? '#2a2a2a' : 'transparent',
+            backgroundColor: hoveredCard === 4 ? '#252531' : '#252531',
             transition: 'background-color 0.3s ease',
           }}
         >

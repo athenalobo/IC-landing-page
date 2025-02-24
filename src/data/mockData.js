@@ -10,7 +10,7 @@ import {
 } from '@mui/icons-material';
 
 const statuses = ["Profiling complete", "Analysis complete", "Configuration pending", "Error", "In progress"];
-const statusColors = ["blue", "green", "yellow", "red"];
+const statusColors = ["blue", "green", "yellow", "red", "white"];
 const ownerNames = ["Olivier Bonsignour", "Shanshan Kan", "Damien Charlemagne", "Christophe Gufflet"];
 
 const generateUniqueApp = (id) => {

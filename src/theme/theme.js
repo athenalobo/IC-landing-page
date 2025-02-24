@@ -4,7 +4,7 @@ export const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#9333ea', // Purple color
+      main: '#7B5CF0', // Purple color
     },
     background: {
       default: '#111318',
@@ -15,7 +15,7 @@ export const theme = createTheme({
       300: '#e0e0e0',
       500: '#9e9e9e',
       700: '#616161',
-      900: '#212121',
+      900: '#212129',
     },
   },
   typography: {

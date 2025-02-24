@@ -161,7 +161,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
       height: '100vh',
       display: 'flex',
       flexDirection: 'column',
-      background: 'linear-gradient(180deg, #000000 0%, #121212 100%)',
+      background: '#1A1A22',
       overflow: 'hidden',
       width: '100%',
     }}>
@@ -172,7 +172,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
         position: 'sticky',
         top: 0,
         zIndex: 10,
-        backgroundColor: 'rgba(0,0,0,0.7)',
+        backgroundColor: '#1A1A22',
         backdropFilter: 'blur(8px)',
       }}>
         <Box sx={{ mb: selectedApp?.status === 'Error' ? 3 : 2 }}>
@@ -247,10 +247,10 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
           width: '8px',
         },
         '&::-webkit-scrollbar-track': {
-          backgroundColor: '#1a1a1a',
+          backgroundColor: '#252531',
         },
         '&::-webkit-scrollbar-thumb': {
-          backgroundColor: '#2a2a2a',
+          backgroundColor: '#252531',
           borderRadius: '4px',
           '&:hover': {
             backgroundColor: '#3a3a3a',

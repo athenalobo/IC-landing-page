@@ -47,7 +47,7 @@ const Header = ({ isAdmin = false, onMenuItemSelect }) => {
     <AppBar 
       position="static" 
       sx={{ 
-        backgroundColor: '#1a1f2b', 
+        backgroundColor: '#252531', 
         boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
         borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
         height: '48px', // Fixed height
@@ -282,7 +282,7 @@ const Header = ({ isAdmin = false, onMenuItemSelect }) => {
               </ListItemIcon>
               <ListItemText primary="What's new" />
               <Box sx={{
-                bgcolor: '#9333ea',
+                bgcolor: '#7B5CF0',
                 borderRadius: '4px',
                 px: 0.8,
                 py: 0.2,

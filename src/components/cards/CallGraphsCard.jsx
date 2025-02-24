@@ -25,7 +25,7 @@ const CallGraphsCard = ({ hoveredCard, setHoveredCard, icon }) => {
               alignItems: 'center',
               borderRadius: '8px',
               marginBottom: '10px',
-              backgroundColor: hoveredCard === 6 ? '#2a2a2a' : 'transparent',
+              backgroundColor: hoveredCard === 6 ? '#252531' : '#252531',
               transition: 'background-color 0.3s ease',
             }}
           >

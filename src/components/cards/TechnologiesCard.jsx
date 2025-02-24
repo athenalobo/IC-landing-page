@@ -22,7 +22,7 @@ const TechnologiesCard = ({ hoveredCard, setHoveredCard, icon }) => {
     >
       <div style={{
         height: '30px',
-        backgroundColor: '#2a2a2a',
+        backgroundColor: '#252531',
         borderRadius: '15px',
         overflow: 'hidden',
         display: 'flex',

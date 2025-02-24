@@ -51,27 +51,33 @@ export const StatusChip = styled(Box)(({ status }) => {
   const statusColors = {
     'analysis complete': {
       color: '#4ade80',
-      bg: '#14532d1a',
+      bg: '#4CAF5020',
       border: '#15803d33',
       shadow: '0 0 8px #4ade8040'
     },
     'profiling complete': {
       color: '#60a5fa',
-      bg: '#1e3a8a1a',
-      border: '#1d4ed833',
-      shadow: '0 0 8px #60a5fa40'
+      bg: '#3B82F620',
+      border: '#3B82F640',
+      shadow: '0 0 8px #3B82F640'
     },
     'configuration pending': {
       color: '#fcd34d',
-      bg: '#713f121a',
+      bg: '#F0B90B20',
       border: '#854d0e33',
       shadow: '0 0 8px #fcd34d40'
     },
     'error': {
       color: '#f87171',
-      bg: '#7f1d1d1a',
+      bg: '#FF4D4D20',
       border: '#b91c1c33',
       shadow: '0 0 8px #f8717140'
+    },
+    'in progress': {
+      color: '#ffffff',
+      bg: '#3B82F620',
+      border: '#3B82F620',
+      shadow: '0 0 8px #ffffff40'
     }
   };
 
@@ -132,7 +138,7 @@ const StyledSearchInput = styled(Box)(({ theme }) => ({
 }));
 
 const StyledCard = styled(Box)(({ theme, selected }) => ({
-  backgroundColor: theme.palette.grey[800],
+  backgroundColor: '#252531',
   borderRadius: theme.shape.borderRadius,
   padding: theme.spacing(1.5),
   marginBottom: theme.spacing(1),
@@ -140,7 +146,7 @@ const StyledCard = styled(Box)(({ theme, selected }) => ({
   cursor: 'pointer',
   position: 'relative',
   ...(selected && {
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: '#2D2D3A',
     boxShadow: `0 0 0 1px ${theme.palette.primary.main}`,
     '&::before': {
       content: '""',
@@ -155,7 +161,7 @@ const StyledCard = styled(Box)(({ theme, selected }) => ({
     }
   }),
   '&:hover': {
-    backgroundColor: selected ? theme.palette.primary.dark : theme.palette.grey[750],
+    backgroundColor: selected ? '#2D2D3A' : '#2D2D3A',
     transform: 'translateX(4px)',
   }
 }));

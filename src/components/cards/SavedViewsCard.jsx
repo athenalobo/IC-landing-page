@@ -39,7 +39,7 @@ const SavedViewsCard = ({ hoveredCard, setHoveredCard, icon }) => {
           style={{
             padding: '12px',
             borderRadius: '8px',
-            backgroundColor: '#2a2a2a',
+            backgroundColor: '#252531',
             marginBottom: '12px',
             transition: 'all 0.2s ease',
             cursor: 'pointer',

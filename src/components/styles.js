@@ -7,12 +7,13 @@ export const styles = {
     overflowY: 'auto',
   },
   card: {
-    backgroundColor: '#1a1a1a',
-    border: '1px solid #2a2a2a',
+    backgroundColor: '#252531',
+    border: '1px solid #252531',
     borderRadius: '12px',
     transition: 'all 0.3s ease',
   },
   cardHover: {
+    backgroundColor: '#2D2D3A',
     transform: 'translateY(-5px)',
     boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
     border: '1px solid #8b5cf6',
