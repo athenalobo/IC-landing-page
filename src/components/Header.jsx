@@ -60,7 +60,8 @@ const Header = ({ isAdmin = false, onMenuItemSelect, activePage = 'Applications'
   const handleLogoClick = () => {
     onMenuItemSelect('Applications');
     setActiveIcon('Applications');
-  };
+    window.location.reload(); // Reloads the entire page
+};
 
   // Define the active icon style
   const getIconStyle = (iconName) => ({
