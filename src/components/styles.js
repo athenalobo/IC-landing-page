@@ -1,9 +1,12 @@
 // src/components/MainView/styles.js
+import { AppBar, Button } from '@mui/material';
+import { styled } from '@mui/material/styles';
+
 export const styles = {
   container: {
     padding: '20px',
     backgroundColor: '#0a0a0a',
-    maxHeight: '100vh',
+    height: '100%',
     overflowY: 'auto',
   },
   card: {
@@ -57,3 +60,21 @@ style.textContent = `
   }
 `;
 document.head.appendChild(style);
+
+export const StyledAppBar = styled(AppBar)(() => ({
+  backgroundColor: 'black',
+  backdropFilter: 'blur(10px)',
+  borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
+}));
+
+export const NavButton = styled(Button)(({ active }) => ({
+  color: active ? '#fff' : 'rgba(255, 255, 255, 0.7)',
+  backgroundColor: active ? '#8b5cf6' : 'rgba(255, 255, 255, 0.15)',
+  '&:hover': {
+    backgroundColor: active ? '#7c3aed' : 'rgba(255, 255, 255, 0.05)'
+  },
+  textTransform: 'none',
+  minWidth: 'auto',
+  borderRadius: '8px',
+  transition: 'all 0.2s ease'
+}));

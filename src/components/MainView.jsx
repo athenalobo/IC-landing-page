@@ -158,7 +158,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
 
   return (
     <Box sx={{
-      height: '100vh',
+      height: '100%',
       display: 'flex',
       flexDirection: 'column',
       background: 'linear-gradient(180deg, #000000 0%, #121212 100%)',

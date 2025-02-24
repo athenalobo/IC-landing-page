@@ -1,18 +1,6 @@
 import { styled } from '@mui/material';
 import { Box, Paper, Button } from '@mui/material';
 
-export const SidebarContainer = styled(Box)(({ theme, isexpanded }) => ({
-  position: 'fixed',
-  left: 0,
-  top: 0,
-  height: '100vh',
-  width: isexpanded === 'true' ? '250px' : '50px',
-  background: '#000000',
-  borderRight: `1px solid ${theme.palette.grey[900]}`,
-  transition: 'width 0.3s ease',
-  zIndex: 1200,
-  overflow: 'hidden'
-}));
 
 export const MainContent = styled(Box)(({ theme, sidebarexpanded }) => ({
   position: 'fixed',

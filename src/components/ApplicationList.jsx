@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { 
   Checkbox,
   Avatar,
@@ -109,7 +109,7 @@ export const StatusChip = styled(Box)(({ status }) => {
   };
 });
 
-const StyledSearchInput = styled(Box)(({ theme }) => ({
+const StyledSearchInput = styled(Box)(() => ({
   display: 'flex',
   alignItems: 'center',
   padding: '2px 10px',
@@ -160,7 +160,7 @@ const StyledCard = styled(Box)(({ theme, selected }) => ({
   }
 }));
 
-const ApplicationList = ({ applications = [], selectedApp, onSelectApp }) => {
+const ApplicationList = ({ applications = [], selectedApp, onSelectApp, isDrawerExpanded, setIsDrawerExpanded }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showOnlyMine, setShowOnlyMine] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -191,7 +191,19 @@ const ApplicationList = ({ applications = [], selectedApp, onSelectApp }) => {
   }, [applications, showOnlyMine]);
 
   return (
-    <>
+    <Box
+          sx={{
+            width: isDrawerExpanded ? 450 : 64,
+            flexShrink: 0,
+            transition: 'width 0.2s ease',
+            bgcolor: '#1a1f2b',
+            borderRight: '1px solid rgba(255, 255, 255, 0.05)',
+            overflow: 'hidden',
+            zIndex: (theme) => theme.zIndex.drawer
+          }}
+          onMouseEnter={() => setIsDrawerExpanded(true)}
+          onMouseLeave={() => setIsDrawerExpanded(false)}
+        >
      <Box sx={{ 
       width: '450px',  // Fixed width to 584px
       bgcolor: 'grey.900',
@@ -402,7 +414,7 @@ const ApplicationList = ({ applications = [], selectedApp, onSelectApp }) => {
           </Box>
         </Box>
       </Dialog>
-    </>
+    </Box>
   );
 };
 

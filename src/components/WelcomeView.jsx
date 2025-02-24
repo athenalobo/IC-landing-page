@@ -27,7 +27,7 @@ const WelcomeView = ({ applications = [] }) => {
 
   return (
     <Box sx={{
-      minHeight: '100vh',
+      minHeight: '100%',
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
