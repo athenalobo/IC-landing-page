@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -26,9 +26,10 @@ import {
   Notifications
 } from '@mui/icons-material';
 
-const Header = ({ isAdmin = false, onMenuItemSelect }) => {
+const Header = ({ isAdmin = false, onMenuItemSelect, activePage = 'Applications' }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const [activeIcon, setActiveIcon] = useState(activePage);
   
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -41,7 +42,37 @@ const Header = ({ isAdmin = false, onMenuItemSelect }) => {
   const handleMenuItemClick = (menuItem) => {
     onMenuItemSelect(menuItem);
     handleClose();
+    
+    // Update active icon when menu items are clicked
+    if (menuItem === 'Applications') {
+      setActiveIcon('Applications');
+    } else if (menuItem === 'Analysis tools') {
+      setActiveIcon('Analysis');
+    } else if (menuItem === 'Help') {
+      setActiveIcon('Help');
+    }
+    else {
+      setActiveIcon(null)
+    }
   };
+  
+  // Function to handle logo click
+  const handleLogoClick = () => {
+    onMenuItemSelect('Applications');
+    setActiveIcon('Applications');
+  };
+
+  // Define the active icon style
+  const getIconStyle = (iconName) => ({
+    color: activeIcon === iconName ? '#7B5CF0' : 'grey.500',
+    '&:hover': { color: activeIcon === iconName ? '#9071F3' : 'primary.main' },
+    padding: '4px',
+    ...(activeIcon === iconName && {
+      boxShadow: '0 0 8px rgba(123, 92, 240, 0.6)',
+      backgroundColor: 'rgba(123, 92, 240, 0.1)',
+      borderRadius: '4px'
+    })
+  });
 
   return (
     <AppBar 
@@ -76,11 +107,16 @@ const Header = ({ isAdmin = false, onMenuItemSelect }) => {
           <Typography
             variant="subtitle1"
             component="div"
+            onClick={handleLogoClick}
             sx={{ 
               fontWeight: 600,
               color: '#fff',
               display: 'flex',
-              alignItems: 'center'
+              alignItems: 'center',
+              cursor: 'pointer',
+              '&:hover': {
+                color: '#9071F3'
+              }
             }}
           >
             CAST Imaging
@@ -95,11 +131,7 @@ const Header = ({ isAdmin = false, onMenuItemSelect }) => {
             <Tooltip title="Applications">
               <IconButton 
                 onClick={() => handleMenuItemClick('Applications')}
-                sx={{ 
-                  color: 'grey.500',
-                  '&:hover': { color: 'primary.main' },
-                  padding: '4px'
-                }}
+                sx={getIconStyle('Applications')}
                 size="small" // Use MUI's size prop for consistency
               >
                 <Layers sx={{ fontSize: 20 }} />
@@ -109,14 +141,21 @@ const Header = ({ isAdmin = false, onMenuItemSelect }) => {
             <Tooltip title="Analysis tools">
               <IconButton 
                 onClick={() => handleMenuItemClick('Analysis tools')}
-                sx={{ 
-                  color: 'grey.500',
-                  '&:hover': { color: 'primary.main' },
-                  padding: '4px'
-                }}
+                sx={getIconStyle('Analysis')}
                 size="small"
               >
                 <Timeline sx={{ fontSize: 20 }} />
+              </IconButton>
+            </Tooltip>
+            
+            {/* Added Help icon to the header */}
+            <Tooltip title="Help">
+              <IconButton 
+                onClick={() => handleMenuItemClick('Help')}
+                sx={getIconStyle('Help')}
+                size="small"
+              >
+                <HelpOutline sx={{ fontSize: 20 }} />
               </IconButton>
             </Tooltip>
             
@@ -203,6 +242,15 @@ const Header = ({ isAdmin = false, onMenuItemSelect }) => {
                   display: 'block'
                 }}
               >
+                CAST Software
+              </Typography>
+              <Typography 
+                variant="caption" 
+                sx={{ 
+                  color: 'grey.500',
+                  display: 'block'
+                }}
+              >
                 o.bonsignour@castsoftware.com
               </Typography>
             </Box>
@@ -250,18 +298,8 @@ const Header = ({ isAdmin = false, onMenuItemSelect }) => {
             )}
             
             <Typography variant="caption" sx={{ px: 2, pt: 1, pb: 0.5, color: 'grey.500', display: 'block' }}>
-              Help & Resources
+              Documentation & Resources
             </Typography>
-            
-            <MenuItem onClick={() => handleMenuItemClick('Help')} sx={{
-              color: 'grey.300',
-              '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.04)' }
-            }}>
-              <ListItemIcon sx={{ color: 'grey.500', minWidth: 36 }}>
-                <HelpOutline fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Help" />
-            </MenuItem>
             
             <MenuItem onClick={() => handleMenuItemClick('Documentation')} sx={{
               color: 'grey.300',
