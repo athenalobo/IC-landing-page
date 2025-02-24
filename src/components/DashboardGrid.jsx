@@ -1,6 +1,6 @@
 // src/components/MainView/DashboardGrid.jsx
 import React, { useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { Activity, FileCode, Layout, BookmarkIcon, FolderGit2, Database, Share2 } from 'lucide-react';
 import SummaryCard from './cards/SummaryCard';
 import TechnologiesCard from './cards/TechnologiesCard';
@@ -31,15 +31,18 @@ const DashboardGrid = ({ disabled, visibleCards }) => {
       gap: 3,
       p: 3,
       maxWidth: '100%',
-      margin: '0 auto'
+      margin: '0 auto',
+      paddingBottom: '80px'
     }}>
       {shouldShowCard('summary') ? (
       <SummaryCard {...cardProps} icon={Activity} />) : (<>
         <SummaryCard {...cardProps} icon={Activity} />
-      <TechnologiesCard {...cardProps} icon={FileCode} />
-      <ArchitectureCard {...cardProps} icon={Layout} />
+      <TechnologiesCard {...cardProps} icon={FileCode} />      
       <SavedViewsCard {...cardProps} icon={BookmarkIcon} />
+      <Stack gap={3}>
+      <ArchitectureCard {...cardProps} icon={Layout} />
       <ObjectTypeCard {...cardProps} icon={FolderGit2} />
+      </Stack>
       <DataManagementCard {...cardProps} icon={Database} />
       <CallGraphsCard {...cardProps} icon={Share2} /></>)}
       {/* ) */}

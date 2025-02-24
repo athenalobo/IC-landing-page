@@ -7,18 +7,19 @@ import {
   List,
   ListItem,
   Link,
-  keyframes 
+  keyframes,
+  Tooltip,
+  Stack,
 } from '@mui/material';
-import { Compass, Loader2 } from 'lucide-react';
-import NavigationBar from './NavigationBar';
-import DashboardGrid from './DashboardGrid';
-import ImprovementGrid from './ImprovementGrid';
+import { Compass, Loader2, Eye, GitBranch, Gauge, Search, Settings } from 'lucide-react';
 import ImpactImg from '../assets/image.png';
 import { StatusChip } from './ApplicationList';
 import ConfigPage from './ConfigPage';
 import { applications } from '../data/mockData';
 import WelcomeView from './WelcomeView';
 import ConfigPage1 from './ConfigPage1';
+import DashboardGrid from './DashboardGrid';
+import ImprovementGrid from './ImprovementGrid';
 
 const float = keyframes`
   0%, 100% { transform: translateY(0) translateX(0); }
@@ -27,9 +28,99 @@ const float = keyframes`
   75% { transform: translateY(-30px) translateX(5px); }
 `;
 
+// Define blinking animation for the status chip
+const blink = keyframes`
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+`;
+
+// Compact NavigationBar Component
+const CompactNavigationBar = ({ activeSection, onSectionChange, availableSections, selectedApp }) => {
+  // If status is Configuration Pending, only show configuration
+  if (selectedApp?.status === 'Configuration pending') {
+    return (
+      <Box
+        onClick={() => onSectionChange('configuration')}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 0.75,
+          color: 'white',
+          cursor: 'pointer',
+          padding: '0.3rem 0.6rem',
+          borderRadius: '4px',
+          backgroundColor: 'rgba(139,92,246,0.2)',
+          height: '2rem',
+        }}
+      >
+        <Settings size={14} />
+        <span style={{ fontSize: '0.75rem', fontWeight: 500 }}>Configuration</span>
+      </Box>
+    );
+  }
+
+  const sections = [
+    { id: 'view', label: 'View', icon: Eye, tooltip: 'View' },
+    { id: 'impact', label: 'Impact', icon: GitBranch, tooltip: 'Run impact analysis' },
+    { id: 'improve', label: 'Improve', icon: Gauge, tooltip: 'Improve' },
+    { id: 'search', label: 'Search', icon: Search, tooltip: 'Search in CAST Imaging' },
+    { id: 'configuration', label: 'Config', icon: Settings, tooltip: 'Application configuration' },
+  ];
+
+  return (
+    <Box sx={{ display: 'flex', gap: 0.75 }}>
+      {sections.map((section) => {
+        const Icon = section.icon;
+        const isActive = activeSection === section.id;
+        const isEnabled = section.id === 'configuration' || availableSections.includes(section.id);
+        
+        if (!isEnabled) return null;
+        
+        return (
+          <Tooltip key={section.id} title={section.tooltip} placement="bottom" arrow>
+            <Box
+              onClick={() => onSectionChange(section.id)}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 0.75,
+                color: isActive ? 'white' : 'rgba(255,255,255,0.6)',
+                cursor: 'pointer',
+                padding: '0.3rem 0.6rem',
+                borderRadius: '4px',
+                transition: 'all 0.2s ease',
+                position: 'relative',
+                height: '2rem',
+                '&:hover': {
+                  backgroundColor: 'rgba(255,255,255,0.1)',
+                  color: 'white',
+                },
+                ...(isActive && {
+                  backgroundColor: 'rgba(139,92,246,0.2)',
+                  borderBottom: '2px solid #8b5cf6',
+                })
+              }}
+            >
+              <Icon size={14} />
+              <span style={{ 
+                fontSize: '0.75rem',
+                fontWeight: isActive ? 600 : 500,
+                whiteSpace: 'nowrap'
+              }}>
+                {section.label}
+              </span>
+            </Box>
+          </Tooltip>
+        );
+      })}
+    </Box>
+  );
+};
+
 const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showContent, setShowContent] = useState(false);
+  const [showErrorDetails, setShowErrorDetails] = useState(false);
 
   useEffect(() => {
     if (selectedApp) {
@@ -156,6 +247,10 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
     return ['view', 'configuration'];
   };
 
+  // Check if the status is 'in progress' to apply blinking animation
+  // Note: Using lowercase 'in progress' to match the case in the original code
+  const isInProgress = selectedApp.status.toLowerCase() === 'in progress';
+
   return (
     <Box sx={{
       height: '100vh',
@@ -165,77 +260,115 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
       overflow: 'hidden',
       width: '100%',
     }}>
-      <Box sx={{
-        borderBottom: 1,
-        borderColor: 'grey.800',
-        p: 3,
+      {/* Compact Header Section */}
+      <Stack direction={'row'} sx={{
+        borderBottom: '1px solid rgba(100,100,100,0.2)',
+        p: 1.5,
+        px: 3,
         position: 'sticky',
         top: 0,
         zIndex: 10,
         backgroundColor: '#1A1A22',
         backdropFilter: 'blur(8px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
       }}>
-        <Box sx={{ mb: selectedApp?.status === 'Error' ? 3 : 2 }}>
+        <Stack direction={'row'} alignItems={'center'} gap={2}>
           <Typography variant="h1" sx={{
             color: 'white',
             margin: 0,
-            fontSize: '1.75rem',
+            fontSize: '1.25rem',
             fontWeight: 'bold',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
           }}>
             {selectedApp.name}
           </Typography>
-          <Typography variant="body2" sx={{
-            color: 'grey.500',
-            mt: 1
-          }}>
-            <StatusChip status={selectedApp.status}>
-              {selectedApp.status}
-            </StatusChip>
-          </Typography>
           
-          {selectedApp.status === 'Error' && (
-            <Alert 
-              severity="error"
-              sx={{
-                mt: 2,
-                backgroundColor: 'rgba(211, 47, 47, 0.1)',
+          <CompactNavigationBar
+            activeSection={activeSection}
+            onSectionChange={onSectionChange}
+            availableSections={getEnabledSections()}
+            selectedApp={selectedApp}
+          />
+        </Stack>
+        <StatusChip 
+          status={selectedApp.status} 
+          sx={{ 
+            ml: 1,
+            ...(isInProgress && {
+              animation: `${blink} 1.5s ease-in-out infinite`
+            })
+          }}
+        >
+          {selectedApp.status}
+        </StatusChip>
+      </Stack>
+
+      {/* Error Alert - Conditional rendering */}
+      {selectedApp.status === 'Error' && (
+        <Box sx={{ px: 1.5, pt: 1, pb: showErrorDetails ? 0 : 1 }}>
+          <Alert 
+            severity="error"
+            sx={{
+              backgroundColor: 'rgba(211, 47, 47, 0.1)',
+              color: '#ff4444',
+              padding: '0.5rem 1rem',
+              '& .MuiAlert-icon': {
                 color: '#ff4444',
-                '& .MuiAlert-icon': {
-                  color: '#ff4444'
-                },
-                '& .MuiAlert-message': {
-                  width: '100%'
-                },
-                '& a': {
-                  color: '#ff8a80',
-                  textDecoration: 'underline',
-                  '&:hover': {
-                    color: '#ff5252'
-                  }
+                padding: '0.5rem 0',
+                marginRight: 1
+              },
+              '& .MuiAlert-message': {
+                width: '100%',
+                padding: '0.25rem 0'
+              },
+              '& a': {
+                color: '#ff8a80',
+                textDecoration: 'underline',
+                '&:hover': {
+                  color: '#ff5252'
                 }
-              }}
-            >
-              <AlertTitle sx={{ color: '#ff4444', fontWeight: 'bold' }}>
+              }
+            }}
+          >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Typography sx={{ color: '#ff4444', fontWeight: 'bold', fontSize: '0.85rem' }}>
                 Analysis Error
-              </AlertTitle>
-              Deep Analysis encountered an error while generating the CSV computation. CAST Software has been informed and will contact you at the earliest. You can stay updated using - {' '}
+              </Typography>
               <Link 
-                href="https://castsoftware.zendesk.com/tickets/99999"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowErrorDetails(!showErrorDetails);
+                }}
+                sx={{ 
+                  color: '#ff8a80', 
+                  fontSize: '0.75rem',
+                  textDecoration: 'none',
+                  '&:hover': { textDecoration: 'underline' }
+                }}
               >
-                Zendesk ticket
+                {showErrorDetails ? 'Hide details' : 'Show details'}
               </Link>
-            </Alert>
-          )}
+            </Box>
+            {showErrorDetails && (
+              <Typography sx={{ fontSize: '0.8rem', mt: 1, mb: 1 }}>
+                Deep Analysis encountered an error while generating the CSV computation. CAST Software has been informed and will contact you at the earliest. You can stay updated using - {' '}
+                <Link 
+                  href="https://castsoftware.zendesk.com/tickets/99999"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Zendesk ticket
+                </Link>
+              </Typography>
+            )}
+          </Alert>
         </Box>
-        <NavigationBar
-          activeSection={activeSection}
-          onSectionChange={onSectionChange}
-          availableSections={getEnabledSections()}
-          selectedApp={selectedApp}
-        />
-      </Box>
+      )}
 
       <Box sx={{
         flex: 1,

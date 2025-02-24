@@ -2,6 +2,7 @@
 import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import CardWrapper from '../CardWrapper';
+import { Typography } from '@mui/material';
 
 const ArchitectureCard = ({ hoveredCard, setHoveredCard, icon }) => {
   const layers = [
@@ -20,7 +21,7 @@ const ArchitectureCard = ({ hoveredCard, setHoveredCard, icon }) => {
       setHoveredCard={setHoveredCard}
     >
       <div style={{ color: '#a0a0a0' }}>
-        {layers.map((layer, i) => (
+        {/* {layers.map((layer, i) => (
           <div
             key={i}
             style={{
@@ -37,7 +38,8 @@ const ArchitectureCard = ({ hoveredCard, setHoveredCard, icon }) => {
             <span>{layer}</span>
             <ChevronRight size={20} />
           </div>
-        ))}
+        ))} */}
+        <Typography>{'This view organizes your application\'s components into logical layers, providing a crystal-clear, high-level understanding of its architecture for effortless analysis and decision-making.'}</Typography>
       </div>
     </CardWrapper>
   );

@@ -1,6 +1,7 @@
 // src/components/MainView/cards/ObjectTypeCard.jsx
 import React from 'react';
 import CardWrapper from '../CardWrapper';
+import { Typography } from '@mui/material';
 
 const ObjectTypeCard = ({ hoveredCard, setHoveredCard, icon }) => {
   const objectTypes = [
@@ -17,7 +18,7 @@ const ObjectTypeCard = ({ hoveredCard, setHoveredCard, icon }) => {
       hoveredCard={hoveredCard}
       setHoveredCard={setHoveredCard}
     >
-      {objectTypes.map((type, i) => (
+      {/* {objectTypes.map((type, i) => (
         <div
           key={i}
           style={{
@@ -42,7 +43,8 @@ const ObjectTypeCard = ({ hoveredCard, setHoveredCard, icon }) => {
           </div>
           <span style={{ color: 'white', fontWeight: 500 }}>{type.count}</span>
         </div>
-      ))}
+      ))} */}
+      <Typography color='#a0a0a0'>{'This view elegantly categorizes objects by type, offering an intuitive way to explore and understand your application\'s structure with remarkable clarity.'}</Typography>
     </CardWrapper>
   );
 };
