@@ -40,7 +40,8 @@ const ConfigPage = ({ selectedApp }) => {
       bottom: 0,
       width: '100%',
       height: '100%',
-      background: 'linear-gradient(180deg, #0a0a0a 0%, #121212 100%)',
+      backgroundColor: '#1A1A22',
+      // background: 'linear-gradient(180deg, #0a0a0a 0%, #121212 100%)',
       overflow: 'hidden',
     }}>
       {/* Ambient glow */}
@@ -59,12 +60,12 @@ const ConfigPage = ({ selectedApp }) => {
             position: 'absolute',
             width: '3px',
             height: '3px',
-            backgroundColor: 'rgba(139,92,246,0.9)',
+            backgroundColor: '#1A1A22',
             borderRadius: '50%',
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            animation: `${float} ${Math.random() * 10 + 10}s linear infinite`,
-            animationDelay: `${Math.random() * 5}s`,
+            // left: `${Math.random() * 100}%`,
+            // top: `${Math.random() * 100}%`,
+            // animation: `${float} ${Math.random() * 10 + 10}s linear infinite`,
+            // animationDelay: `${Math.random() * 5}s`,
           }}
         />
       ))}

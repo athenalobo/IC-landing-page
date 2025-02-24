@@ -73,7 +73,8 @@ const ConfigPage1 = () => {
       <Box sx={{
         position: 'absolute',
         inset: 0,
-        background: 'radial-gradient(circle at 50% 50%, rgba(139,92,246,0.1), transparent 70%)',
+        backgroundColor: '#1A1A22',
+        // background: 'radial-gradient(circle at 50% 50%, rgba(139,92,246,0.1), transparent 70%)',
         pointerEvents: 'none',
       }} />
 
