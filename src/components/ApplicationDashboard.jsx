@@ -32,7 +32,8 @@ const ApplicationDashboard = () => {
         display: 'flex', 
         flex: 1, 
         height: 'calc(100vh - 48px)', // Adjust for the header height
-        overflow: 'hidden' // Prevent scrolling at this level as well
+        overflow: 'hidden', // Prevent scrolling at this level as well
+        position: 'relative' // Added for positioning context
       }}>
         {selectedMenuItem === 'Applications' ? (
           <>
@@ -41,11 +42,18 @@ const ApplicationDashboard = () => {
               selectedApp={selectedApp}
               onSelectApp={setSelectedApp}
             />
-            <MainView
-              selectedApp={selectedApp}
-              activeSection={activeSection}
-              onSectionChange={setActiveSection}
-            />
+            <Box sx={{ 
+              flex: 1, 
+              transition: 'margin-left 0.3s ease-in-out',
+              position: 'relative',
+              zIndex: 1
+            }}>
+              <MainView
+                selectedApp={selectedApp}
+                activeSection={activeSection}
+                onSectionChange={setActiveSection}
+              />
+            </Box>
           </>
         ) : (
           <Box sx={{ width: '100%', position: 'relative' }}>
