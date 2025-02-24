@@ -103,7 +103,7 @@ const WelcomeView = ({ applications = [] }) => {
       </Box>
 
       {/* Bottom statistics */}
-      <Box sx={{
+      {/* <Box sx={{
         position: 'relative',
         zIndex: 2,
         p: 4,
@@ -221,7 +221,7 @@ const WelcomeView = ({ applications = [] }) => {
             </Typography>
           </Box>
         </Box>
-      </Box>
+      </Box> */}
     </Box>
   );
 };

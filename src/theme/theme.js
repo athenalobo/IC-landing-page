@@ -1,31 +1,32 @@
-import { createTheme } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
 
 export const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#9333EA', // Purple
+      main: '#9333ea', // Purple color
     },
     background: {
-      default: '#000000',
-      paper: '#18181B',
-    },
-    text: {
-      primary: '#FFFFFF',
-      secondary: 'rgba(255, 255, 255, 0.7)',
+      default: '#111318',
+      paper: '#1a1f2b',
     },
     grey: {
-      800: '#27272A',
-      900: '#18181B',
+      100: '#f5f5f5',
+      300: '#e0e0e0',
+      500: '#9e9e9e',
+      700: '#616161',
+      900: '#212121',
     },
   },
   typography: {
     fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
   },
-  shape: {
-    borderRadius: 8,
-  },
   components: {
+    MuiAppBar: {
+      defaultProps: {
+        elevation: 0,
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {
@@ -35,3 +36,5 @@ export const theme = createTheme({
     },
   },
 });
+
+export default theme;

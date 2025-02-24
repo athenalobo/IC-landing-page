@@ -1,47 +1,58 @@
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
-import { MainContent } from './styled/StyledComponents';
-import Sidebar from './Sidebar';
+import Header from './Header';
 import ApplicationList from './ApplicationList';
 import MainView from './MainView';
 import { applications } from '../data/mockData';
 import { PlaceholderView } from './PlaceholderView';
 
 const ApplicationDashboard = () => {
-  const [isDrawerExpanded, setIsDrawerExpanded] = useState(false);
   const [selectedApp, setSelectedApp] = useState(null);
   const [activeSection, setActiveSection] = useState('view');
   const [selectedMenuItem, setSelectedMenuItem] = useState('Applications');
 
+  const handleMenuItemSelect = (menuItem) => {
+    setSelectedMenuItem(menuItem);
+    // Additional logic for handling menu item selection
+  };
+
   return (
-    <Box sx={{ display: 'flex', height: '100vh', bgcolor: '#000000' }}>
-      <Sidebar
-        isExpanded={isDrawerExpanded}
-        onMouseEnter={() => setIsDrawerExpanded(true)}
-        onMouseLeave={() => setIsDrawerExpanded(false)}
-        selectedMenuItem={selectedMenuItem}
-        onMenuItemSelect={setSelectedMenuItem}
+    <Box sx={{ 
+      display: 'flex', 
+      flexDirection: 'column', 
+      height: '100vh', 
+      bgcolor: '#111318',
+      overflow: 'hidden' // Prevent scrolling at the container level
+    }}>
+      <Header 
+        isAdmin={true} // Add this if needed for admin menu items
+        onMenuItemSelect={handleMenuItemSelect}
       />
-      <MainContent sidebarexpanded={isDrawerExpanded.toString()}>
-        <Box sx={{ display: 'flex', flex: 1, height: '100vh' }}>
-          {selectedMenuItem === 'Applications' ? (
-            <>
-              <ApplicationList
-                applications={applications}
-                selectedApp={selectedApp}
-                onSelectApp={setSelectedApp}
-              />
-              <MainView
-                selectedApp={selectedApp}
-                activeSection={activeSection}
-                onSectionChange={setActiveSection}
-              />
-            </>
-          ) : (
-            <PlaceholderView/>
-          )}
-        </Box>
-      </MainContent>
+      <Box sx={{ 
+        display: 'flex', 
+        flex: 1, 
+        height: 'calc(100vh - 48px)', // Adjust for the header height
+        overflow: 'hidden' // Prevent scrolling at this level as well
+      }}>
+        {selectedMenuItem === 'Applications' ? (
+          <>
+            <ApplicationList
+              applications={applications}
+              selectedApp={selectedApp}
+              onSelectApp={setSelectedApp}
+            />
+            <MainView
+              selectedApp={selectedApp}
+              activeSection={activeSection}
+              onSectionChange={setActiveSection}
+            />
+          </>
+        ) : (
+          <Box sx={{ width: '100%', position: 'relative' }}>
+            <PlaceholderView menuItem={selectedMenuItem} />
+          </Box>
+        )}
+      </Box>
     </Box>
   );
 };
