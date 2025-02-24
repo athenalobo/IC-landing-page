@@ -1,73 +1,64 @@
 import { Box, Toolbar, Typography, IconButton, Avatar } from '@mui/material';
 import { Settings as SettingsIcon } from '@mui/icons-material';
-import { StyledAppBar } from './styles';
 import Navigation from './Navigation';
 
 const Header = ({ activeSection, setActiveSection, handleProfileClick }) => {
     return (
-        <StyledAppBar position="fixed" elevation={0}>
-            <Toolbar sx={{
-                height: 64,
-                px: 2,
-                gap: 2,
-                justifyContent: 'space-between'
-            }}>
-                <Box sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 1.5
-                }}>
-                    <Typography
-                        variant="subtitle1"
-                        sx={{
-                            fontWeight: 600,
-                            fontSize: '1rem',
-                            color: 'white',
-                            letterSpacing: '-0.01em'
-                        }}
-                    >
-                        CAST Imaging
-                    </Typography>
-                </Box>
+        <Box
+            component="header"
+            sx={{
+                bgcolor: '#1a1f2b',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+                position: 'sticky',
+                top: 0,
+                zIndex: 1100,
+            }}
+        >
+            <Toolbar sx={{ minHeight: '64px !important' }}>
+                <Typography
+                    variant="h6"
+                    component="div"
+                    sx={{ color: 'white', fontWeight: 600, mr: 4 }}
+                >
+                    CAST Imaging
+                </Typography>
 
-                <Navigation activeSection={activeSection} setActiveSection={setActiveSection} />
+                <Navigation
+                    activeSection={activeSection}
+                    setActiveSection={setActiveSection}
+                />
 
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <Box sx={{ flexGrow: 1 }} />
+
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <IconButton
                         size="small"
-                        sx={{
-                            color: 'rgba(255, 255, 255, 0.7)',
-                            '&:hover': {
-                                color: 'white',
-                                bgcolor: 'rgba(255, 255, 255, 0.05)'
-                            }
-                        }}
+                        edge="end"
+                        aria-label="settings"
+                        sx={{ color: 'grey.400' }}
                     >
-                        <SettingsIcon fontSize="small" />
+                        <SettingsIcon />
                     </IconButton>
                     <IconButton
                         size="small"
+                        edge="end"
                         onClick={handleProfileClick}
-                        sx={{
-                            p: 0,
-                            '&:hover': {
-                                bgcolor: 'transparent'
-                            }
-                        }}
+                        sx={{ ml: 1 }}
                     >
-                        <Avatar sx={{
-                            bgcolor: '#8b5cf6',
-                            width: 32,
-                            height: 32,
-                            fontSize: '0.875rem',
-                            fontWeight: 500
-                        }}>
+                        <Avatar
+                            sx={{
+                                width: 32,
+                                height: 32,
+                                bgcolor: '#9333ea',
+                                fontSize: '0.875rem',
+                            }}
+                        >
                             OB
                         </Avatar>
                     </IconButton>
                 </Box>
             </Toolbar>
-        </StyledAppBar>
+        </Box>
     );
 };
 

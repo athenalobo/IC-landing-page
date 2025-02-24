@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   Box, 
   Alert,
   AlertTitle,
   Typography,
-  List,
-  ListItem,
   Link,
   keyframes 
 } from '@mui/material';
-import { Compass, Loader2 } from 'lucide-react';
+import { Compass} from 'lucide-react';
 import NavigationBar from './NavigationBar';
 import DashboardGrid from './DashboardGrid';
 import ImprovementGrid from './ImprovementGrid';
