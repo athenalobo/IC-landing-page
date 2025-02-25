@@ -114,6 +114,7 @@ const CompactNavigationBar = ({ activeSection, onSectionChange, availableSection
 const MainView = ({ selectedApp, activeSection, onSectionChange, onLoadingChange, onCardClick }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showContent, setShowContent] = useState(false);
+  const [showBlankPage, setShowBlankPage] = useState(false); // New state for blank page
 
   // Update the parent component when loading state changes
   useEffect(() => {
@@ -126,6 +127,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange, onLoadingChange
     if (selectedApp) {
       setIsLoading(true);
       setShowContent(false);
+      setShowBlankPage(false); // Reset blank page state when app changes
       
       const loaderTimer = setTimeout(() => {
         setIsLoading(false);
@@ -182,7 +184,37 @@ const MainView = ({ selectedApp, activeSection, onSectionChange, onLoadingChange
     setIsLoading(loadingState);
   };
 
+  // Modified handleCardClick to also manage blank page state
+  const handleCardClickFromDashboard = (isCardLoading, showBlank = false) => {
+    if (onCardClick) {
+      onCardClick(isCardLoading);
+    }
+    
+    // If loading is complete and showBlank is true, show the blank page
+    if (!isCardLoading && showBlank) {
+      setShowBlankPage(true);
+    } else {
+      setShowBlankPage(false);
+    }
+  };
+
   const renderContent = () => {
+    // Show blank white page if requested
+    if (showBlankPage) {
+      return (
+        <Box sx={{
+          width: '100%',
+          height: '100%',
+          backgroundColor: '#ffffff',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          {/* Intentionally left blank */}
+        </Box>
+      );
+    }
+
     if (activeSection === 'configuration') {
       return <ConfigPage selectedApp={selectedApp}/>;
     }
@@ -214,7 +246,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange, onLoadingChange
           disabled={!isNavigationEnabled('improve')} 
           visibleCards={visibleCards}
           onLoadingChange={handleDashboardLoadingChange}
-          onCardClick={onCardClick} // Pass down the card click handler
+          onCardClick={handleCardClickFromDashboard} // Use the modified handler
         />;
       case 'configuration':
         return <ConfigPage selectedApp={selectedApp} />;
@@ -223,7 +255,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange, onLoadingChange
           disabled={!isNavigationEnabled('view')} 
           visibleCards={visibleCards}
           onLoadingChange={handleDashboardLoadingChange}
-          onCardClick={onCardClick} // Pass down the card click handler
+          onCardClick={handleCardClickFromDashboard} // Use the modified handler
         />;
       case 'impact':
       case 'search':
@@ -244,7 +276,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange, onLoadingChange
           disabled={!isNavigationEnabled('view')} 
           visibleCards={visibleCards}
           onLoadingChange={handleDashboardLoadingChange}
-          onCardClick={onCardClick} // Pass down the card click handler
+          onCardClick={handleCardClickFromDashboard} // Use the modified handler
         />;
     }
   };
@@ -259,7 +291,6 @@ const MainView = ({ selectedApp, activeSection, onSectionChange, onLoadingChange
   };
 
   // Check if the status is 'in progress' to apply blinking animation
-  // Note: Using lowercase 'in progress' to match the case in the original code
   const isInProgress = selectedApp.status.toLowerCase() === 'in progress';
 
   return (
@@ -267,7 +298,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange, onLoadingChange
       height: '100vh',
       display: 'flex',
       flexDirection: 'column',
-      background: '#1A1A22',
+      background: showBlankPage ? '#ffffff' : '#1A1A22', // Change background to white when showing blank page
       overflow: 'hidden',
       width: '100%',
     }}>
@@ -321,8 +352,8 @@ const MainView = ({ selectedApp, activeSection, onSectionChange, onLoadingChange
         </StatusChip>
       </Stack>
 
-      {/* Error Alert - Modified to show full details by default */}
-      {selectedApp.status === 'Error' && (
+      {/* Error Alert - Only show on error and not in blank page mode */}
+      {selectedApp.status === 'Error' && !showBlankPage && (
         <Box sx={{ px: 1.5, pt: 1, pb: 1 }}>
           <Alert 
             severity="error"
@@ -377,26 +408,25 @@ const MainView = ({ selectedApp, activeSection, onSectionChange, onLoadingChange
           width: '8px',
         },
         '&::-webkit-scrollbar-track': {
-          backgroundColor: '#252531',
+          backgroundColor: showBlankPage ? '#ffffff' : '#252531',
         },
         '&::-webkit-scrollbar-thumb': {
-          backgroundColor: '#252531',
+          backgroundColor: showBlankPage ? '#e0e0e0' : '#252531',
           borderRadius: '4px',
           '&:hover': {
-            backgroundColor: '#3a3a3a',
+            backgroundColor: showBlankPage ? '#d0d0d0' : '#3a3a3a',
           },
         },
       }}>
-        
-          <Box sx={{
-            opacity: showContent ? 1 : 0,
-            transition: 'opacity 0.2s ease-in-out',
-            height: '100%',
-            width: '100%',
-            position: 'relative',
-          }}>
-            {renderContent()}
-          </Box>
+        <Box sx={{
+          opacity: showContent || showBlankPage ? 1 : 0,
+          transition: 'opacity 0.2s ease-in-out',
+          height: '100%',
+          width: '100%',
+          position: 'relative',
+        }}>
+          {renderContent()}
+        </Box>
       </Box>
     </Box>
   );

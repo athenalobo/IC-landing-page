@@ -30,13 +30,13 @@ const DashboardGrid = ({ disabled, visibleCards = 'all', onLoadingChange, onCard
   const handleCardClick = () => {
     // Use the full screen loading from parent component
     if (onCardClick) {
-      onCardClick(true);
+      onCardClick(true); // Show loading overlay
     }
     
     // For demo purposes, simulate ending the content loading after 3 seconds
     setTimeout(() => {
       if (onCardClick) {
-        onCardClick(false);
+        onCardClick(false, true); // Hide loading overlay and show blank page
       }
       setContentLoading(false);
       setIsLoading(false);

@@ -81,19 +81,19 @@ const spin = keyframes`
           }}
         >
           <Box
-  sx={{
-    animation: `${spin} 0.5s linear infinite`,
-    color: '#8b5cf6',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '48px',
-    height: '48px',
-    transformOrigin: 'center',
-  }}
->
-  <Compass size={48} />
-</Box>
+            sx={{
+              animation: `${spin} 0.5s linear infinite`,
+              color: '#8b5cf6',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '48px',
+              height: '48px',
+              transformOrigin: 'center',
+            }}
+          >
+            <Compass size={48} />
+          </Box>
         </Box>
       )}
 
@@ -142,19 +142,19 @@ const spin = keyframes`
                   }}
                 >
                   <Box
-  sx={{
-    animation: `${spin} 0.5s linear infinite`,
-    color: '#8b5cf6',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '48px',
-    height: '48px',
-    transformOrigin: 'center',
-  }}
->
-  <Compass size={48} />
-</Box>
+                    sx={{
+                      animation: `${spin} 0.5s linear infinite`,
+                      color: '#8b5cf6',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      width: '48px',
+                      height: '48px',
+                      transformOrigin: 'center',
+                    }}
+                  >
+                    <Compass size={48} />
+                  </Box>
                 </Box>
               )}
               <MainView
