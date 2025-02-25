@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Stack } from '@mui/material';
 import { Activity, FileCode, Layout, BookmarkIcon, FolderGit2, Database, Share2, Compass } from 'lucide-react';
 import SummaryCard from './cards/SummaryCard';
@@ -12,8 +12,8 @@ import CallGraphsCard from './cards/CallGraphsCard';
 const DashboardGrid = ({ disabled, visibleCards = 'all' }) => {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [showSpinner, setShowSpinner] = useState(false);
-  const [showWhitePage, setShowWhitePage] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(false);
+  const [contentLoading, setContentLoading] = useState(false);
 
   // Fixed shouldShowCard function to properly check if a card should be visible
   const shouldShowCard = (cardId) => {
@@ -22,14 +22,14 @@ const DashboardGrid = ({ disabled, visibleCards = 'all' }) => {
   };
 
   const handleCardClick = () => {
-    // First show spinner and white background
-    setShowSpinner(true);
-    setShowWhitePage(true);
+    // First phase: Full-screen loading with spinner
+    setInitialLoading(true);
     setIsLoading(true);
     
-    // After 1 second, hide spinner but keep white background
+    // After 1 second, transition to content-only loading without spinner
     setTimeout(() => {
-      setShowSpinner(false);
+      setInitialLoading(false);
+      setContentLoading(true);
     }, 1000);
   };
 
@@ -58,8 +58,46 @@ const DashboardGrid = ({ disabled, visibleCards = 'all' }) => {
 
   return (
     <>
-      {/* Loading overlay with high z-index */}
-      {showWhitePage && (
+      {/* Full-screen loading overlay (covers everything including header) */}
+      {initialLoading && (
+        <Box
+          sx={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: 'white',
+            zIndex: 10000,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          <Box
+            sx={{
+              animation: 'spin 1s linear infinite',
+              '@keyframes spin': {
+                '0%': {
+                  transform: 'rotate(0deg)'
+                },
+                '100%': {
+                  transform: 'rotate(360deg)'
+                }
+              },
+              color: '#8b5cf6',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}
+          >
+            <Compass size={60} strokeWidth={2} />
+          </Box>
+        </Box>
+      )}
+
+      {/* Content-only white background (sits below header and navbar) */}
+      {contentLoading && (
         <Box
           sx={{
             position: 'absolute',
@@ -68,34 +106,12 @@ const DashboardGrid = ({ disabled, visibleCards = 'all' }) => {
             width: '100%',
             height: '100%',
             backgroundColor: 'white',
-            zIndex: 10000,
+            zIndex: 100, // Lower z-index so it stays below header/navbar
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center'
           }}
-        >
-          {showSpinner && (
-            <Box
-              sx={{
-                animation: 'spin 1s linear infinite',
-                '@keyframes spin': {
-                  '0%': {
-                    transform: 'rotate(0deg)'
-                  },
-                  '100%': {
-                    transform: 'rotate(360deg)'
-                  }
-                },
-                color: '#8b5cf6',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              <Compass size={60} strokeWidth={2} />
-            </Box>
-          )}
-        </Box>
+        />
       )}
 
       {/* Original grid */}
@@ -107,7 +123,9 @@ const DashboardGrid = ({ disabled, visibleCards = 'all' }) => {
           p: 3,
           maxWidth: '100%',
           margin: '0 auto',
-          paddingBottom: '80px'
+          paddingBottom: '80px',
+          position: 'relative', // Ensure content-only overlay positions relative to this
+          zIndex: (contentLoading ? -1 : 'auto') // Keep grid below white background when content loading
         }}
       >
         {shouldShowCard('summary') && renderCard(SummaryCard, Activity, 'summary')}
