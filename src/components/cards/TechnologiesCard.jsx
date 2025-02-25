@@ -2,7 +2,7 @@
 import React from 'react';
 import CardWrapper from '../CardWrapper';
 
-const TechnologiesCard = ({ hoveredCard, setHoveredCard, icon }) => {
+const TechnologiesCard = ({ hoveredCard, setHoveredCard, icon, id }) => {
   const technologies = [
     { name: 'Java', percentage: 45.8, color: '#f97316' },
     { name: 'JavaScript', percentage: 22.3, color: '#eab308' },
@@ -14,7 +14,7 @@ const TechnologiesCard = ({ hoveredCard, setHoveredCard, icon }) => {
 
   return (
     <CardWrapper
-      index={1}
+    id={id}
       title="Programming Technologies"
       icon={icon}
       hoveredCard={hoveredCard}

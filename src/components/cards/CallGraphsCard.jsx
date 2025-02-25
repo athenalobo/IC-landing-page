@@ -3,12 +3,12 @@ import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import CardWrapper from '../CardWrapper';
 
-const CallGraphsCard = ({ hoveredCard, setHoveredCard, icon }) => {
+const CallGraphsCard = ({ hoveredCard, setHoveredCard, icon, id }) => {
   const items = ['Transactions', 'Data Call Graphs'];
 
   return (
     <CardWrapper
-      index={6}
+      id={id}
       title="End to End Call Graphs"
       icon={icon}
       hoveredCard={hoveredCard}

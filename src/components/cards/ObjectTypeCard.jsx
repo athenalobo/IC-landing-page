@@ -3,7 +3,7 @@ import React from 'react';
 import CardWrapper from '../CardWrapper';
 import { Typography } from '@mui/material';
 
-const ObjectTypeCard = ({ hoveredCard, setHoveredCard, icon }) => {
+const ObjectTypeCard = ({ hoveredCard, setHoveredCard, icon, id }) => {
   const objectTypes = [
     { name: 'Controllers', count: 125 },
     { name: 'Services', count: 243 },
@@ -12,7 +12,7 @@ const ObjectTypeCard = ({ hoveredCard, setHoveredCard, icon }) => {
 
   return (
     <CardWrapper
-      index={4}
+      id={id}
       title="Object Type Taxonomy"
       icon={icon}
       hoveredCard={hoveredCard}

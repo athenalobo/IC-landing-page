@@ -3,12 +3,12 @@ import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import CardWrapper from '../CardWrapper';
 
-const DataManagementCard = ({ hoveredCard, setHoveredCard, icon }) => {
+const DataManagementCard = ({ hoveredCard, setHoveredCard, icon, id}) => {
   const items = ['Data Model', 'Data Access'];
 
   return (
     <CardWrapper
-      index={5}
+      id={id}
       title="Data Management"
       icon={icon}
       hoveredCard={hoveredCard}

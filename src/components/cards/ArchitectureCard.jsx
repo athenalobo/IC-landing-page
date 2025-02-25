@@ -4,7 +4,7 @@ import { ChevronRight } from 'lucide-react';
 import CardWrapper from '../CardWrapper';
 import { Typography } from '@mui/material';
 
-const ArchitectureCard = ({ hoveredCard, setHoveredCard, icon }) => {
+const ArchitectureCard = ({ hoveredCard, setHoveredCard, icon, id }) => {
   const layers = [
     'Presentation Layer',
     'Business Layer',
@@ -14,7 +14,7 @@ const ArchitectureCard = ({ hoveredCard, setHoveredCard, icon }) => {
 
   return (
     <CardWrapper
-      index={2}
+      id={id}
       title="Architecture Layer"
       icon={icon}
       hoveredCard={hoveredCard}

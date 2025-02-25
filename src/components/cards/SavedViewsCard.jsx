@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 import CardWrapper from '../CardWrapper';
 
-const SavedViewsCard = ({ hoveredCard, setHoveredCard, icon }) => {
+const SavedViewsCard = ({ hoveredCard, setHoveredCard, icon, id }) => {
   const [hoveredView, setHoveredView] = useState(null);
   
   const savedViews = [
@@ -26,7 +26,7 @@ const SavedViewsCard = ({ hoveredCard, setHoveredCard, icon }) => {
 
   return (
     <CardWrapper
-      index={3}
+    id={id}
       title="Saved Views"
       icon={icon}
       hoveredCard={hoveredCard}
