@@ -119,7 +119,7 @@ const Header = ({ isAdmin = false, onMenuItemSelect, activePage = 'Applications'
               '&:hover': {
                 opacity: 0.9
               },
-              ml: 0.5, // Add a tiny bit of margin to prevent logo from touching edge
+              ml: 1.5, // Add a tiny bit of margin to prevent logo from touching edge
             }}
           >
             <img src={Logo} alt="Logo" />
@@ -130,7 +130,7 @@ const Header = ({ isAdmin = false, onMenuItemSelect, activePage = 'Applications'
             display: 'flex', 
             alignItems: 'center', 
             gap: 0.5, // Reduce gap between icons
-            mr: 0.5 // Add a tiny bit of margin to prevent icons from touching edge
+            mr: 2 // Add a tiny bit of margin to prevent icons from touching edge
           }}>
             <Tooltip title="Applications">
               <IconButton 
