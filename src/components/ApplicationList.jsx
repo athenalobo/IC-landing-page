@@ -9,7 +9,8 @@ import {
   Dialog,
   styled,
   Tooltip,
-  IconButton
+  IconButton,
+  capitalize
 } from '@mui/material';
 import { 
   Add, 
@@ -455,7 +456,7 @@ useEffect(() => {
                         noWrap 
                         sx={{ flex: 1 }}
                       >
-                        {app.name}
+                        {capitalize(app.name)}
                       </Typography>
                       <StatusChip status={app.status}>
                         {app.status}

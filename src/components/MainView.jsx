@@ -20,6 +20,7 @@ import WelcomeView from './WelcomeView';
 import ConfigPage1 from './ConfigPage1';
 import DashboardGrid from './DashboardGrid';
 import ImprovementGrid from './ImprovementGrid';
+import {capitalize} from '@mui/material';
 
 const float = keyframes`
   0%, 100% { transform: translateY(0) translateX(0); }
@@ -293,16 +294,19 @@ const MainView = ({ selectedApp, activeSection, onSectionChange, onLoadingChange
         justifyContent: 'space-between',
       }}>
         <Stack direction={'row'} alignItems={'center'} gap={2}>
-          <Typography variant="h1" sx={{
-            color: 'white',
-            margin: 0,
-            fontSize: '1.25rem',
-            fontWeight: 'bold',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          }}>
-            {selectedApp.name}
+         <Typography
+            variant="h1"
+            sx={{
+              color: 'white',
+              margin: 0,
+              fontSize: '1.25rem',
+              fontWeight: 'bold',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            {selectedApp.name.length > 20 ? `${capitalize(selectedApp.name.substring(0, 20))}...` : capitalize(selectedApp.name)}
           </Typography>
           
           <CompactNavigationBar
