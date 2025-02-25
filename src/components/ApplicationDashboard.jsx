@@ -1,58 +1,83 @@
+// In ApplicationDashboard.jsx
 import React, { useState, useEffect } from 'react';
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { Compass } from 'lucide-react';
 import Header from './Header';
 import ApplicationList from './ApplicationList';
 import MainView from './MainView';
 import { applications } from '../data/mockData';
 import { PlaceholderView } from './PlaceholderView';
+import CompactNavigationBar from './CompactNavigationBar';
 import { keyframes } from '@mui/material';
+import {Typography, capitalize} from '@mui/material';
+import { StatusChip } from './ApplicationList';
 
 const ApplicationDashboard = () => {
-const spin = keyframes`
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-`;
+  const spin = keyframes`
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  `;
   const [selectedApp, setSelectedApp] = useState(null);
   const [activeSection, setActiveSection] = useState('view');
   const [selectedMenuItem, setSelectedMenuItem] = useState('Applications');
   const [isLoading, setIsLoading] = useState(false);
   const [appSwitchLoading, setAppSwitchLoading] = useState(false);
   const [cardClickLoading, setCardClickLoading] = useState(false);
-  // Add state to control when to collapse the app list
   const [shouldCollapseAppList, setShouldCollapseAppList] = useState(false);
 
-  // This function will be passed down to DashboardGrid
   const handleLoadingChange = (loadingState) => {
     setIsLoading(loadingState);
   };
 
-  // This function will be passed down to MainView and then to DashboardGrid
+  // Modified handler for card clicks
   const handleCardClick = (isLoading) => {
+    // Show full-screen loading overlay
     setCardClickLoading(isLoading);
+    
+    // If loading is starting (isLoading is true), wait until it's done to switch the menu
+    if (isLoading) {
+      // Short timeout to ensure the loading spinner is visible before changing views
+      setTimeout(() => {
+        // Change to 'Viewer' menu item when loading completes
+        setSelectedMenuItem('Viewer');
+      }, 300);
+    }
   };
 
   const handleMenuItemSelect = (menuItem) => {
+    // If switching back to Applications from Viewer, reset the view
+    if (menuItem === 'Applications' && selectedMenuItem === 'Viewer') {
+      setActiveSection('view');
+    }
     setSelectedMenuItem(menuItem);
-    // Additional logic for handling menu item selection
   };
 
-  // Fixed handleAppSelect function
   const handleAppSelect = (app) => {
-    // Show loading animation only in the main view when switching apps
     setAppSwitchLoading(true);
-    // We want to keep the app list expanded during loading
     setShouldCollapseAppList(false);
-    
-    // Set the selected app immediately
     setSelectedApp(app);
     
-    // Hide loading after 500ms and then set the collapse flag
     setTimeout(() => {
       setAppSwitchLoading(false);
-      // Now that loading is complete, allow the app list to collapse
       setShouldCollapseAppList(true);
     }, 500);
+  };
+
+  // Helper function to determine what sections should be available in viewer mode
+  const getEnabledSections = () => {
+    if (!selectedApp) return ['view', 'configuration'];
+    
+    switch (selectedApp.status) {
+      case 'Analysis complete':
+        return ['view', 'improve', 'impact', 'search', 'configuration'];
+      case 'Profiling complete':
+      case 'in progress':
+      case 'Error':
+        return ['view', 'configuration'];
+      case 'Configuration pending':
+      default:
+        return ['configuration'];
+    }
   };
 
   return (
@@ -61,10 +86,10 @@ const spin = keyframes`
       flexDirection: 'column',
       height: '100vh',
       bgcolor: '#111318',
-      overflow: 'hidden', // Prevent scrolling at the container level
-      position: 'relative' // For absolute positioning of loading overlay
+      overflow: 'hidden',
+      position: 'relative'
     }}>
-      {/* Full-screen loading overlay for card clicks - covers EVERYTHING */}
+      {/* Full-screen loading overlay for card clicks */}
       {cardClickLoading && (
         <Box
           sx={{
@@ -74,7 +99,7 @@ const spin = keyframes`
             width: '100vw',
             height: '100vh',
             backgroundColor: '#1A1A22',
-            zIndex: 10000, // Ensure it covers everything including headers
+            zIndex: 10000,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center'
@@ -98,26 +123,25 @@ const spin = keyframes`
       )}
 
       <Header
-        isAdmin={true} // Add this if needed for admin menu items
+        isAdmin={true}
         onMenuItemSelect={handleMenuItemSelect}
       />
       
       <Box sx={{
         display: 'flex',
         flex: 1,
-        height: 'calc(100vh - 48px)', // Adjust for the header height
-        overflow: 'hidden', // Prevent scrolling at this level as well
-        position: 'relative' // Added for positioning context
+        height: 'calc(100vh - 48px)',
+        overflow: 'hidden',
+        position: 'relative'
       }}>
         {selectedMenuItem === 'Applications' ? (
           <>
-            {/* Always show ApplicationList when in Applications menu, regardless of loading */}
             <ApplicationList
               applications={applications}
               selectedApp={selectedApp}
               onSelectApp={handleAppSelect}
-              preventAutoCollapse={appSwitchLoading} // Pass loading state to prevent auto-collapse
-              shouldCollapseAfterLoading={shouldCollapseAppList} // Pass flag to control when to collapse
+              preventAutoCollapse={appSwitchLoading}
+              shouldCollapseAfterLoading={shouldCollapseAppList}
             />
             <Box sx={{
               flex: 1,
@@ -125,7 +149,6 @@ const spin = keyframes`
               position: 'relative',
               zIndex: 1
             }}>
-              {/* App switch loading overlay - only covers the main view area */}
               {appSwitchLoading && (
                 <Box
                   sx={{
@@ -135,7 +158,7 @@ const spin = keyframes`
                     width: '100%',
                     height: '100%',
                     backgroundColor: '#1A1A22',
-                    zIndex: 1000, // Lower than the full-screen loader but above content
+                    zIndex: 1000,
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center'
@@ -162,11 +185,80 @@ const spin = keyframes`
                 activeSection={activeSection}
                 onSectionChange={setActiveSection}
                 onLoadingChange={handleLoadingChange}
-                onCardClick={handleCardClick} // Pass the card click handler
+                onCardClick={handleCardClick}
               />
             </Box>
           </>
+        ) : selectedMenuItem === 'Viewer' ? (
+          // Viewer mode - only shows a blank screen with the header
+          <Box sx={{ width: '100%', position: 'relative', backgroundColor: '#1A1A22' }}>
+            <Box sx={{
+              width: '100%',
+              height: '100%',
+              backgroundColor: '#1A1A22',
+              display: 'flex',
+              flexDirection: 'column'
+            }}>
+              <Stack direction={'row'} sx={{
+        borderBottom: '1px solid rgba(100,100,100,0.2)',
+        p: 1.5,
+        px: 3,
+        position: 'sticky',
+        top: 0,
+        zIndex: 10,
+        backgroundColor: '#1A1A22',
+        backdropFilter: 'blur(8px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      }}>
+        <Stack direction={'row'} alignItems={'center'} gap={2}>
+         <Typography
+            variant="h1"
+            sx={{
+              color: 'white',
+              margin: 0,
+              fontSize: '1.25rem',
+              fontWeight: 'bold',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            {selectedApp.name.length > 20 ? `${capitalize(selectedApp.name.substring(0, 20))}...` : capitalize(selectedApp.name)}
+          </Typography>
+          
+           <CompactNavigationBar
+                  activeSection={activeSection}
+                  onSectionChange={setActiveSection}
+                  availableSections={getEnabledSections()}
+                  selectedApp={selectedApp}
+                />
+        </Stack>
+        <StatusChip 
+          status={selectedApp.status} 
+          
+        >
+          {selectedApp.status}
+        </StatusChip>
+      </Stack>
+              
+              {/* Content area */}
+              <Box sx={{
+                flex: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white',
+                p: 3,
+                backgroundColor: 'white',
+              }}>
+                {/* Blank space - you can customize this as needed */}
+              </Box>
+            </Box>
+          </Box>
         ) : (
+          // Other menu items (Reports, Settings, etc.)
           <Box sx={{ width: '100%', position: 'relative' }}>
             <PlaceholderView menuItem={selectedMenuItem} />
           </Box>
