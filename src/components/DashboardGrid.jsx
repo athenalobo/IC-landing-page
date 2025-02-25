@@ -42,11 +42,16 @@ const DashboardGrid = ({ disabled, visibleCards = 'all' }) => {
   };
 
   // Wrap each card with a clickable Box to ensure clicks are captured
-  const renderCard = (CardComponent, icon, id) => (
+  const renderCard = (CardComponent, icon, id, height = 'auto') => (
     <Box 
       onClick={handleCardClick} 
       sx={{ 
         cursor: 'pointer',
+        height: height,
+        display: 'flex',
+        '& > *': { // Make child component fill the container
+          flexGrow: 1
+        },
         '&:hover': {
           opacity: 0.9
         }
@@ -128,9 +133,34 @@ const DashboardGrid = ({ disabled, visibleCards = 'all' }) => {
           zIndex: (contentLoading ? -1 : 'auto') // Keep grid below white background when content loading
         }}
       >
-        {shouldShowCard('summary') && renderCard(SummaryCard, Activity, 'summary')}
+        {/* Use a ref to get the actual height of the summary card for matching */}
+        <Box 
+          sx={{ 
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%'
+          }}
+        >
+          {shouldShowCard('summary') && (
+            <Box sx={{ height: '100%' }}>
+              {renderCard(SummaryCard, Activity, 'summary', '100%')}
+            </Box>
+          )}
+        </Box>
         
-        {shouldShowCard('technologies') && renderCard(TechnologiesCard, FileCode, 'technologies')}
+        <Box 
+          sx={{ 
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%'
+          }}
+        >
+          {shouldShowCard('technologies') && (
+            <Box sx={{ height: '100%' }}>
+              {renderCard(TechnologiesCard, FileCode, 'technologies', '100%')}
+            </Box>
+          )}
+        </Box>
         
         {shouldShowCard('savedViews') && renderCard(SavedViewsCard, BookmarkIcon, 'savedViews')}
         
