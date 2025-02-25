@@ -114,7 +114,6 @@ const CompactNavigationBar = ({ activeSection, onSectionChange, availableSection
 const MainView = ({ selectedApp, activeSection, onSectionChange, onLoadingChange, onCardClick }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showContent, setShowContent] = useState(false);
-  const [showErrorDetails, setShowErrorDetails] = useState(false);
 
   // Update the parent component when loading state changes
   useEffect(() => {
@@ -322,9 +321,9 @@ const MainView = ({ selectedApp, activeSection, onSectionChange, onLoadingChange
         </StatusChip>
       </Stack>
 
-      {/* Error Alert - Conditional rendering */}
+      {/* Error Alert - Modified to show full details by default */}
       {selectedApp.status === 'Error' && (
-        <Box sx={{ px: 1.5, pt: 1, pb: showErrorDetails ? 0 : 1 }}>
+        <Box sx={{ px: 1.5, pt: 1, pb: 1 }}>
           <Alert 
             severity="error"
             sx={{
@@ -353,34 +352,17 @@ const MainView = ({ selectedApp, activeSection, onSectionChange, onLoadingChange
               <Typography sx={{ color: '#ff4444', fontWeight: 'bold', fontSize: '0.85rem' }}>
                 Analysis Error
               </Typography>
-              <Link 
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setShowErrorDetails(!showErrorDetails);
-                }}
-                sx={{ 
-                  color: '#ff8a80', 
-                  fontSize: '0.75rem',
-                  textDecoration: 'none',
-                  '&:hover': { textDecoration: 'underline' }
-                }}
-              >
-                {showErrorDetails ? 'Hide details' : 'Show details'}
-              </Link>
             </Box>
-            {showErrorDetails && (
-              <Typography sx={{ fontSize: '0.8rem', mt: 1, mb: 1 }}>
-                Deep Analysis encountered an error while generating the CSV computation. CAST Software has been informed and will contact you at the earliest. You can stay updated using - {' '}
-                <Link 
-                  href="https://castsoftware.zendesk.com/tickets/99999"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Zendesk ticket
-                </Link>
-              </Typography>
-            )}
+            <Typography sx={{ fontSize: '0.8rem', mt: 1, mb: 1 }}>
+              Deep Analysis encountered an error while generating the CSV computation. CAST Software has been informed and will contact you at the earliest. You can stay updated using - {' '}
+              <Link 
+                href="https://castsoftware.zendesk.com/tickets/99999"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Zendesk ticket
+              </Link>
+            </Typography>
           </Alert>
         </Box>
       )}
