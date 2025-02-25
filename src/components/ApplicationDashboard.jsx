@@ -32,27 +32,24 @@ const ApplicationDashboard = () => {
     // Additional logic for handling menu item selection
   };
 
-  // App switching loading - only affects the main view
-  // In the handleAppSelect function
-const handleAppSelect = (app) => {
-  // Show loading animation when switching apps
-  setAppSwitchLoading(true);
-  // We want to keep the app list expanded during loading
-  setShouldCollapseAppList(false);
-  
-  // Hide loading after 500ms and then collapse the app list
-  setTimeout(() => {
-    setAppSwitchLoading(false);
+  // Fixed handleAppSelect function
+  const handleAppSelect = (app) => {
+    // Show loading animation only in the main view when switching apps
+    setAppSwitchLoading(true);
+    // We want to keep the app list expanded during loading
+    setShouldCollapseAppList(false);
+    
+    // Set the selected app immediately
     setSelectedApp(app);
-    // Now that loading is complete, allow the app list to collapse
-    setShouldCollapseAppList(true);
-  }, 500);
-};
+    
+    // Hide loading after 500ms and then set the collapse flag
+    setTimeout(() => {
+      setAppSwitchLoading(false);
+      // Now that loading is complete, allow the app list to collapse
+      setShouldCollapseAppList(true);
+    }, 500);
+  };
 
-  // Determine if we should hide the application list
-  // Hide when:
-  // 1. Not on Applications menu item
-  // 2. When loading is active
   const shouldHideApplicationList = selectedMenuItem !== 'Applications' || isLoading;
 
   return (
@@ -113,15 +110,14 @@ const handleAppSelect = (app) => {
       }}>
         {selectedMenuItem === 'Applications' ? (
           <>
-            {!isLoading && (
-              <ApplicationList
-                applications={applications}
-                selectedApp={selectedApp}
-                onSelectApp={handleAppSelect}
-                preventAutoCollapse={appSwitchLoading} // Pass loading state to prevent auto-collapse
-                shouldCollapseAfterLoading={shouldCollapseAppList} // Pass flag to control when to collapse
-              />
-            )}
+            {/* Always show ApplicationList when in Applications menu, regardless of loading */}
+            <ApplicationList
+              applications={applications}
+              selectedApp={selectedApp}
+              onSelectApp={handleAppSelect}
+              preventAutoCollapse={appSwitchLoading} // Pass loading state to prevent auto-collapse
+              shouldCollapseAfterLoading={shouldCollapseAppList} // Pass flag to control when to collapse
+            />
             <Box sx={{
               flex: 1,
               transition: 'margin-left 0.3s ease-in-out',

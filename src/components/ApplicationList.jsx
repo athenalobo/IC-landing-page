@@ -258,8 +258,7 @@ const ApplicationList = ({
   
   
 
-  // In ApplicationList.jsx
-// Collapse panel when app is selected (unless locked) and not in loading state
+ // In ApplicationList.jsx
 useEffect(() => {
   if (selectedApp && isExpanded && !isLocked) {
     // Only collapse when loading is finished and we're instructed to collapse
