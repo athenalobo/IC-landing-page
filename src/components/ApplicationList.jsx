@@ -293,6 +293,7 @@ const ApplicationList = ({ applications = [], selectedApp, onSelectApp }) => {
   return (
     <>
       {/* Panel container */}
+      
       <Box sx={{ 
         position: 'relative',
         width: isExpanded ? '450px' : '0px',
@@ -389,10 +390,24 @@ const ApplicationList = ({ applications = [], selectedApp, onSelectApp }) => {
           </Box>
 
           <Box sx={{ 
-            overflowY: 'auto',
-            flex: 1,
-            p: 2,
-          }}>
+  overflowY: 'auto',
+  flex: 1,
+  p: 2,
+  '&::-webkit-scrollbar': {
+    width: '8px',
+  },
+  '&::-webkit-scrollbar-track': {
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: '4px',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    borderRadius: '4px',
+    '&:hover': {
+      backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    },
+  },
+}}>
             {filteredApps.map((app) => (
               <StyledCard
                 key={app.id}
