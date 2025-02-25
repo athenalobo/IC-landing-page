@@ -9,11 +9,17 @@ import ObjectTypeCard from './cards/ObjectTypeCard';
 import DataManagementCard from './cards/DataManagementCard';
 import CallGraphsCard from './cards/CallGraphsCard';
 
-const DashboardGrid = ({ disabled, visibleCards = 'all' }) => {
+const DashboardGrid = ({ disabled, visibleCards = 'all', onLoadingChange, onCardClick }) => {
   const [hoveredCard, setHoveredCard] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [initialLoading, setInitialLoading] = useState(false);
   const [contentLoading, setContentLoading] = useState(false);
+
+  // Update parent component with loading state whenever it changes
+  useEffect(() => {
+    if (onLoadingChange) {
+      onLoadingChange(contentLoading);
+    }
+  }, [contentLoading, onLoadingChange]);
 
   // Fixed shouldShowCard function to properly check if a card should be visible
   const shouldShowCard = (cardId) => {
@@ -22,15 +28,19 @@ const DashboardGrid = ({ disabled, visibleCards = 'all' }) => {
   };
 
   const handleCardClick = () => {
-    // First phase: Full-screen loading with spinner
-    setInitialLoading(true);
-    setIsLoading(true);
+    // Use the full screen loading from parent component
+    if (onCardClick) {
+      onCardClick(true);
+    }
     
-    // After 1 second, transition to content-only loading without spinner
+    // For demo purposes, simulate ending the content loading after 3 seconds
     setTimeout(() => {
-      setInitialLoading(false);
-      setContentLoading(true);
-    }, 1000);
+      if (onCardClick) {
+        onCardClick(false);
+      }
+      setContentLoading(false);
+      setIsLoading(false);
+    }, 3000);
   };
 
   // Base props for all cards
@@ -62,124 +72,65 @@ const DashboardGrid = ({ disabled, visibleCards = 'all' }) => {
   );
 
   return (
-    <>
-      {/* Full-screen loading overlay (covers everything including header) */}
-      {initialLoading && (
-        <Box
-          sx={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            backgroundColor: 'white',
-            zIndex: 10000,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        >
-          <Box
-            sx={{
-              animation: 'spin 1s linear infinite',
-              '@keyframes spin': {
-                '0%': {
-                  transform: 'rotate(0deg)'
-                },
-                '100%': {
-                  transform: 'rotate(360deg)'
-                }
-              },
-              color: '#8b5cf6',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-          >
-            <Compass size={60} strokeWidth={2} />
-          </Box>
-        </Box>
-      )}
-
-      {/* Content-only white background (sits below header and navbar) */}
-      {contentLoading && (
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            backgroundColor: 'white',
-            zIndex: 100, // Lower z-index so it stays below header/navbar
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}
-        />
-      )}
-
-      {/* Original grid */}
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: 3,
-          p: 3,
-          maxWidth: '100%',
-          margin: '0 auto',
-          paddingBottom: '80px',
-          position: 'relative', // Ensure content-only overlay positions relative to this
-          zIndex: (contentLoading ? -1 : 'auto') // Keep grid below white background when content loading
+    <Box
+      sx={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)',
+        gap: 3,
+        p: 3,
+        maxWidth: '100%',
+        margin: '0 auto',
+        paddingBottom: '80px',
+        position: 'relative',
+        zIndex: 'auto'
+      }}
+    >
+      {/* Use a ref to get the actual height of the summary card for matching */}
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%'
         }}
       >
-        {/* Use a ref to get the actual height of the summary card for matching */}
-        <Box 
-          sx={{ 
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%'
-          }}
-        >
-          {shouldShowCard('summary') && (
-            <Box sx={{ height: '100%' }}>
-              {renderCard(SummaryCard, Activity, 'summary', '100%')}
-            </Box>
-          )}
-        </Box>
-        
-        <Box 
-          sx={{ 
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%'
-          }}
-        >
-          {shouldShowCard('technologies') && (
-            <Box sx={{ height: '100%' }}>
-              {renderCard(TechnologiesCard, FileCode, 'technologies', '100%')}
-            </Box>
-          )}
-        </Box>
-        
-        {shouldShowCard('savedViews') && renderCard(SavedViewsCard, BookmarkIcon, 'savedViews')}
-        
-        {shouldShowCard('architecture') && shouldShowCard('objectType') && (
-          <Stack gap={3}>
-            <Box onClick={handleCardClick} sx={{ cursor: 'pointer' }}>
-              <ArchitectureCard {...cardProps} icon={Layout} id="architecture" />
-            </Box>
-            <Box onClick={handleCardClick} sx={{ cursor: 'pointer' }}>
-              <ObjectTypeCard {...cardProps} icon={FolderGit2} id="objectType" />
-            </Box>
-          </Stack>
+        {shouldShowCard('summary') && (
+          <Box sx={{ height: '100%' }}>
+            {renderCard(SummaryCard, Activity, 'summary', '100%')}
+          </Box>
         )}
-        
-        {shouldShowCard('dataManagement') && renderCard(DataManagementCard, Database, 'dataManagement')}
-        
-        {shouldShowCard('callGraphs') && renderCard(CallGraphsCard, Share2, 'callGraphs')}
       </Box>
-    </>
+      
+      <Box 
+        sx={{ 
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%'
+        }}
+      >
+        {shouldShowCard('technologies') && (
+          <Box sx={{ height: '100%' }}>
+            {renderCard(TechnologiesCard, FileCode, 'technologies', '100%')}
+          </Box>
+        )}
+      </Box>
+      
+      {shouldShowCard('savedViews') && renderCard(SavedViewsCard, BookmarkIcon, 'savedViews')}
+      
+      {shouldShowCard('architecture') && shouldShowCard('objectType') && (
+        <Stack gap={3}>
+          <Box onClick={handleCardClick} sx={{ cursor: 'pointer' }}>
+            <ArchitectureCard {...cardProps} icon={Layout} id="architecture" />
+          </Box>
+          <Box onClick={handleCardClick} sx={{ cursor: 'pointer' }}>
+            <ObjectTypeCard {...cardProps} icon={FolderGit2} id="objectType" />
+          </Box>
+        </Stack>
+      )}
+      
+      {shouldShowCard('dataManagement') && renderCard(DataManagementCard, Database, 'dataManagement')}
+      
+      {shouldShowCard('callGraphs') && renderCard(CallGraphsCard, Share2, 'callGraphs')}
+    </Box>
   );
 };
 

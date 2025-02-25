@@ -22,6 +22,7 @@ import {
 import { keyframes } from '@mui/system';
 import { Compass } from 'lucide-react';
 
+// ... (keeping all your existing styled components and helper functions)
 const float = keyframes`
   0%, 100% { transform: translateY(0) translateX(0); }
   25% { transform: translateY(-20px) translateX(10px); }
@@ -240,8 +241,13 @@ const CollapsedToggleButton = styled(IconButton)(({ theme }) => ({
     transform: 'scale(0.95)',
   }
 }));
-
-const ApplicationList = ({ applications = [], selectedApp, onSelectApp }) => {
+const ApplicationList = ({ 
+  applications = [], 
+  selectedApp, 
+  onSelectApp, 
+  preventAutoCollapse = false,
+  shouldCollapseAfterLoading = false 
+}) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showOnlyMine, setShowOnlyMine] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -250,12 +256,27 @@ const ApplicationList = ({ applications = [], selectedApp, onSelectApp }) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [isLocked, setIsLocked] = useState(false);
   
-  // Collapse panel when app is selected (unless locked)
-  useEffect(() => {
-    if (selectedApp && isExpanded && !isLocked) {
+  
+
+  // In ApplicationList.jsx
+// Collapse panel when app is selected (unless locked) and not in loading state
+useEffect(() => {
+  if (selectedApp && isExpanded && !isLocked) {
+    // Only collapse when loading is finished and we're instructed to collapse
+    if (!preventAutoCollapse && shouldCollapseAfterLoading) {
       setIsExpanded(false);
     }
-  }, [selectedApp, isLocked]);
+  }
+}, [selectedApp, isLocked, preventAutoCollapse, shouldCollapseAfterLoading]);
+  
+  
+  // If we're in loading state, ensure the panel is expanded
+  useEffect(() => {
+    if (preventAutoCollapse && !isExpanded) {
+      setIsExpanded(true);
+    }
+  }, [preventAutoCollapse]);
+
   
   const handleToggleClick = () => {
     setIsExpanded(!isExpanded);
@@ -484,8 +505,7 @@ const ApplicationList = ({ applications = [], selectedApp, onSelectApp }) => {
             </ControlButton>
           </Tooltip>
           
-          {/* Collapse button only shown when not locked */}
-          {/* When locked, this position is taken by the lock button */}
+          {/* Collapse button only shown when not locked and not in loading state */}
           <Tooltip 
             title="Collapse panel"
             placement="right"
@@ -494,7 +514,7 @@ const ApplicationList = ({ applications = [], selectedApp, onSelectApp }) => {
             <ControlButton 
               aria-label="Collapse panel"
               onClick={handleToggleClick}
-              isVisible={isExpanded && !isLocked}
+              isVisible={isExpanded && !isLocked && !preventAutoCollapse}
               sx={{ 
                 animation: `${iconTransition} 0.4s ease-out`,
               }}

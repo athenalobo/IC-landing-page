@@ -117,10 +117,17 @@ const CompactNavigationBar = ({ activeSection, onSectionChange, availableSection
   );
 };
 
-const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
+const MainView = ({ selectedApp, activeSection, onSectionChange, onLoadingChange, onCardClick }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showContent, setShowContent] = useState(false);
   const [showErrorDetails, setShowErrorDetails] = useState(false);
+
+  // Update the parent component when loading state changes
+  useEffect(() => {
+    if (onLoadingChange) {
+      onLoadingChange(isLoading);
+    }
+  }, [isLoading, onLoadingChange]);
 
   useEffect(() => {
     if (selectedApp) {
@@ -177,6 +184,11 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
     return <WelcomeView applications={applications} />;
   }
 
+  // Handle loading state from dashboard grid
+  const handleDashboardLoadingChange = (loadingState) => {
+    setIsLoading(loadingState);
+  };
+
   const renderContent = () => {
     if (activeSection === 'configuration') {
       return <ConfigPage selectedApp={selectedApp}/>;
@@ -208,6 +220,8 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
         return <ImprovementGrid 
           disabled={!isNavigationEnabled('improve')} 
           visibleCards={visibleCards}
+          onLoadingChange={handleDashboardLoadingChange}
+          onCardClick={onCardClick} // Pass down the card click handler
         />;
       case 'configuration':
         return <ConfigPage selectedApp={selectedApp} />;
@@ -215,6 +229,8 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
         return <DashboardGrid 
           disabled={!isNavigationEnabled('view')} 
           visibleCards={visibleCards}
+          onLoadingChange={handleDashboardLoadingChange}
+          onCardClick={onCardClick} // Pass down the card click handler
         />;
       case 'impact':
       case 'search':
@@ -234,6 +250,8 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
         return <DashboardGrid 
           disabled={!isNavigationEnabled('view')} 
           visibleCards={visibleCards}
+          onLoadingChange={handleDashboardLoadingChange}
+          onCardClick={onCardClick} // Pass down the card click handler
         />;
     }
   };
@@ -369,7 +387,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange }) => {
           </Alert>
         </Box>
       )}
-
+      
       <Box sx={{
         flex: 1,
         position: 'relative',
