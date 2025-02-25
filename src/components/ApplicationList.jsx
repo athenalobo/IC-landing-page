@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { 
   Checkbox,
   Avatar,
@@ -10,7 +10,10 @@ import {
   styled,
   Tooltip,
   IconButton,
-  capitalize
+  capitalize,
+  Popper,
+  ClickAwayListener,
+  Paper
 } from '@mui/material';
 import { 
   Add, 
@@ -18,7 +21,8 @@ import {
   ChevronLeft, 
   ChevronRight, 
   Lock, 
-  LockOpen 
+  LockOpen,
+  FilterList 
 } from '@mui/icons-material';
 import { keyframes } from '@mui/system';
 import { Compass } from 'lucide-react';
@@ -242,6 +246,38 @@ const CollapsedToggleButton = styled(IconButton)(({ theme }) => ({
     transform: 'scale(0.95)',
   }
 }));
+
+// New styled components for filter dropdown
+const FilterOption = styled(Box)(({ theme, selected, color }) => ({
+  padding: '8px 12px',
+  fontSize: '0.875rem',
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+  transition: 'all 0.15s ease',
+  position: 'relative',
+  color: selected ? color : 'rgba(255, 255, 255, 0.7)',
+  fontWeight: selected ? 500 : 400,
+  backgroundColor: selected ? 'rgba(30, 30, 30, 0.6)' : 'transparent',
+  borderLeft: selected ? `3px solid ${color}` : '3px solid transparent',
+  '&:hover': {
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+  }
+}));
+
+const FilterDropdown = styled(Paper)(({ theme }) => ({
+  background: 'rgba(25, 25, 35, 0.95)',
+  borderRadius: '8px',
+  backdropFilter: 'blur(12px)',
+  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+  padding: '4px 0',
+  overflow: 'hidden',
+  maxWidth: '220px',
+  width: '100%',
+  animation: `${fadeIn} 0.2s ease-out`,
+  zIndex: 1400,
+}));
+
 const ApplicationList = ({ 
   applications = [], 
   selectedApp, 
@@ -252,23 +288,35 @@ const ApplicationList = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [showOnlyMine, setShowOnlyMine] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [filterAnchorEl, setFilterAnchorEl] = useState(null);
   
   // State for panel collapsing
   const [isExpanded, setIsExpanded] = useState(true);
   const [isLocked, setIsLocked] = useState(false);
   
+  // Reference for filter button
+  const filterButtonRef = useRef(null);
   
+  // Status filter options with their respective colors
+  const statusFilters = [
+    { value: 'all', label: 'All', color: '#8b5cf6' },
+    { value: 'analysis complete', label: 'Analysis Complete', color: '#4ade80' },
+    { value: 'profiling complete', label: 'Profiling Complete', color: '#60a5fa' },
+    { value: 'configuration pending', label: 'Configuration Pending', color: '#fcd34d' },
+    { value: 'error', label: 'Error', color: '#f87171' },
+    { value: 'in progress', label: 'In Progress', color: '#ffffff' },
+  ];
 
- // In ApplicationList.jsx
-useEffect(() => {
-  if (selectedApp && isExpanded && !isLocked) {
-    // Only collapse when loading is finished and we're instructed to collapse
-    if (!preventAutoCollapse && shouldCollapseAfterLoading) {
-      setIsExpanded(false);
+  // In ApplicationList.jsx
+  useEffect(() => {
+    if (selectedApp && isExpanded && !isLocked) {
+      // Only collapse when loading is finished and we're instructed to collapse
+      if (!preventAutoCollapse && shouldCollapseAfterLoading) {
+        setIsExpanded(false);
+      }
     }
-  }
-}, [selectedApp, isLocked, preventAutoCollapse, shouldCollapseAfterLoading]);
-  
+  }, [selectedApp, isLocked, preventAutoCollapse, shouldCollapseAfterLoading]);
   
   // If we're in loading state, ensure the panel is expanded
   useEffect(() => {
@@ -277,7 +325,6 @@ useEffect(() => {
     }
   }, [preventAutoCollapse]);
 
-  
   const handleToggleClick = () => {
     setIsExpanded(!isExpanded);
   };
@@ -286,7 +333,20 @@ useEffect(() => {
     setIsLocked(!isLocked);
   };
 
-  const filteredApps = useMemo(() => {
+  const handleFilterClick = (event) => {
+    setFilterAnchorEl(filterAnchorEl ? null : event.currentTarget);
+  };
+
+  const handleFilterClose = () => {
+    setFilterAnchorEl(null);
+  };
+
+  const handleStatusFilterChange = (status) => {
+    setStatusFilter(status);
+    handleFilterClose();
+  };
+
+const filteredApps = useMemo(() => {
     if (!applications) return [];
     
     return applications.filter(app => {
@@ -299,22 +359,28 @@ useEffect(() => {
       const isMyApp = showOnlyMine 
         ? app.ownerName === "Olivier Bonsignour"
         : true;
+        
+      // Check if it matches the status filter
+      const statusMatches = statusFilter === 'all' 
+        ? true 
+        : app.status.toLowerCase() === statusFilter.toLowerCase();
 
-      return nameMatches && isMyApp;
+      return nameMatches && isMyApp && statusMatches;
     });
-  }, [applications, searchQuery, showOnlyMine]);
+  }, [applications, searchQuery, showOnlyMine, statusFilter]);
 
-  const displayCount = useMemo(() => {
-    if (showOnlyMine) {
-      return applications.filter(app => app.ownerName === "Olivier Bonsignour").length;
-    }
-    return applications.length;
-  }, [applications, showOnlyMine]);
+    const displayCount = useMemo(() => {
+    return filteredApps.length;
+  }, [filteredApps]);
+
+  const isFilterOpen = Boolean(filterAnchorEl);
+  const filterIconColor = statusFilter !== 'all' ? 
+    statusFilters.find(f => f.value === statusFilter)?.color : 
+    'grey.400';
 
   return (
     <>
       {/* Panel container */}
-      
       <Box sx={{ 
         position: 'relative',
         width: isExpanded ? '450px' : '0px',
@@ -407,28 +473,67 @@ useEffect(() => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
+              <Tooltip title="Filter by status">
+                <IconButton 
+                  ref={filterButtonRef}
+                  size="small" 
+                  sx={{ 
+                    color: filterIconColor,
+                    transition: 'color 0.2s ease',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                    }
+                  }}
+                  onClick={handleFilterClick}
+                >
+                  <FilterList />
+                </IconButton>
+              </Tooltip>
             </StyledSearchInput>
+            
+            {/* Status filter dropdown */}
+            <Popper
+              open={isFilterOpen}
+              anchorEl={filterAnchorEl}
+              placement="bottom-end"
+              style={{ zIndex: 1300 }}
+            >
+              <ClickAwayListener onClickAway={handleFilterClose}>
+                <FilterDropdown>
+                  {statusFilters.map((filter) => (
+                    <FilterOption
+                      key={filter.value}
+                      selected={statusFilter === filter.value}
+                      color={filter.color}
+                      onClick={() => handleStatusFilterChange(filter.value)}
+                    >
+                      {filter.label}
+                    </FilterOption>
+                  ))}
+                </FilterDropdown>
+              </ClickAwayListener>
+            </Popper>
           </Box>
 
           <Box sx={{ 
-  overflowY: 'auto',
-  flex: 1,
-  p: 2,
-  '&::-webkit-scrollbar': {
-    width: '8px',
-  },
-  '&::-webkit-scrollbar-track': {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: '4px',
-  },
-  '&::-webkit-scrollbar-thumb': {
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
-    borderRadius: '4px',
-    '&:hover': {
-      backgroundColor: 'rgba(255, 255, 255, 0.25)',
-    },
-  },
-}}>
+            overflowY: 'auto',
+            flex: 1,
+            p: 2,
+            '&::-webkit-scrollbar': {
+              width: '8px',
+            },
+            '&::-webkit-scrollbar-track': {
+              backgroundColor: 'rgba(255, 255, 255, 0.05)',
+              borderRadius: '4px',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: 'rgba(255, 255, 255, 0.15)',
+              borderRadius: '4px',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.25)',
+              },
+            },
+          }}>
             {filteredApps.map((app) => (
               <StyledCard
                 key={app.id}
