@@ -11,7 +11,6 @@ import {
   styled
 } from '@mui/material';
 import { 
-  Compass,
   Settings,
   FolderTree,
   GitBranch,

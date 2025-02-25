@@ -22,13 +22,6 @@ import DashboardGrid from './DashboardGrid';
 import ImprovementGrid from './ImprovementGrid';
 import {capitalize} from '@mui/material';
 
-const float = keyframes`
-  0%, 100% { transform: translateY(0) translateX(0); }
-  25% { transform: translateY(-20px) translateX(10px); }
-  50% { transform: translateY(-10px) translateX(-10px); }
-  75% { transform: translateY(-30px) translateX(5px); }
-`;
-
 // Define blinking animation for the status chip
 const blink = keyframes`
   0%, 100% { opacity: 1; }
@@ -65,7 +58,7 @@ const CompactNavigationBar = ({ activeSection, onSectionChange, availableSection
     { id: 'impact', label: 'Impact', icon: GitBranch, tooltip: 'Run impact analysis' },
     { id: 'improve', label: 'Improve', icon: Gauge, tooltip: 'Improve' },
     { id: 'search', label: 'Search', icon: Search, tooltip: 'Search in CAST Imaging' },
-    { id: 'configuration', label: 'Config', icon: Settings, tooltip: 'Application configuration' },
+    { id: 'configuration', label: 'Configuration', icon: Settings, tooltip: 'Application configuration' },
   ];
 
   return (
@@ -412,22 +405,7 @@ const MainView = ({ selectedApp, activeSection, onSectionChange, onLoadingChange
           },
         },
       }}>
-        {isLoading ? (
-          <Box sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-          }}>
-            <Compass
-              size={48}
-              style={{
-                color: '#8b5cf6',
-                animation: 'spin 1s linear infinite',
-              }}
-            />
-          </Box>
-        ) : (
+        
           <Box sx={{
             opacity: showContent ? 1 : 0,
             transition: 'opacity 0.2s ease-in-out',
@@ -437,7 +415,6 @@ const MainView = ({ selectedApp, activeSection, onSectionChange, onLoadingChange
           }}>
             {renderContent()}
           </Box>
-        )}
       </Box>
     </Box>
   );

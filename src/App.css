@@ -55,16 +55,6 @@ a:hover {
   color: #a855f7;
 }
 
-/* Animation keyframes */
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
 
 /* Application specific styles */
 .app-container {

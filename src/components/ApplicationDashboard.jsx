@@ -6,8 +6,13 @@ import ApplicationList from './ApplicationList';
 import MainView from './MainView';
 import { applications } from '../data/mockData';
 import { PlaceholderView } from './PlaceholderView';
+import { keyframes } from '@mui/material';
 
 const ApplicationDashboard = () => {
+const spin = keyframes`
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+`;
   const [selectedApp, setSelectedApp] = useState(null);
   const [activeSection, setActiveSection] = useState('view');
   const [selectedMenuItem, setSelectedMenuItem] = useState('Applications');
@@ -50,8 +55,6 @@ const ApplicationDashboard = () => {
     }, 500);
   };
 
-  const shouldHideApplicationList = selectedMenuItem !== 'Applications' || isLoading;
-
   return (
     <Box sx={{
       display: 'flex',
@@ -78,21 +81,19 @@ const ApplicationDashboard = () => {
           }}
         >
           <Box
-            sx={{
-              animation: 'spin 1s linear infinite',
-              '@keyframes spin': {
-                '0%': {
-                  transform: 'rotate(0deg)'
-                },
-                '100%': {
-                  transform: 'rotate(360deg)'
-                }
-              },
-              color: '#8b5cf6'
-            }}
-          >
-            <Compass size={48} />
-          </Box>
+  sx={{
+    animation: `${spin} 0.5s linear infinite`,
+    color: '#8b5cf6',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '48px',
+    height: '48px',
+    transformOrigin: 'center',
+  }}
+>
+  <Compass size={48} />
+</Box>
         </Box>
       )}
 
@@ -141,21 +142,19 @@ const ApplicationDashboard = () => {
                   }}
                 >
                   <Box
-                    sx={{
-                      animation: 'spin 1s linear infinite',
-                      '@keyframes spin': {
-                        '0%': {
-                          transform: 'rotate(0deg)'
-                        },
-                        '100%': {
-                          transform: 'rotate(360deg)'
-                        }
-                      },
-                      color: '#8b5cf6'
-                    }}
-                  >
-                    <Compass size={48} />
-                  </Box>
+  sx={{
+    animation: `${spin} 0.5s linear infinite`,
+    color: '#8b5cf6',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '48px',
+    height: '48px',
+    transformOrigin: 'center',
+  }}
+>
+  <Compass size={48} />
+</Box>
                 </Box>
               )}
               <MainView
