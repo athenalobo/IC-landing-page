@@ -172,12 +172,6 @@ const Header = ({ isAdmin = false, onMenuItemSelect, activePage = 'Applications'
               </IconButton>
             </Tooltip>
             
-            <Divider orientation="vertical" flexItem sx={{ 
-              height: '24px', 
-              mx: 1, 
-              borderColor: 'rgba(255, 255, 255, 0.1)'
-            }} />
-            
             <Tooltip title="Profile" arrow>
               <IconButton
                 onClick={handleClick}
