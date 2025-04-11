@@ -59,7 +59,7 @@ const ConfigPage1 = () => {
     { icon: FolderTree, text: 'Configure Root Path', action: 'root-path' },
     { icon: Settings, text: 'Configure GH Analysis', action: 'gh-analysis' },
     { icon: GitBranch, text: 'View Repositories', action: 'view-repos' },
-    { icon: Trash2, text: 'Delete Options', action: 'delete', danger: true }
+    { icon: Trash2, text: 'Delete Application', action: 'delete', danger: true }
   ];
 
   return (

@@ -196,7 +196,7 @@ const ConfigPage = ({ selectedApp }) => {
                   },
                 }}
               >
-                Delete Options
+                Delete Application
               </Button>
             </CardContent>
           </Card>
